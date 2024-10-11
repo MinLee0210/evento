@@ -1,0 +1,14 @@
+fastapi==0.112.3
+googletrans==4.0.0rc1
+Pillow==10.4.0
+protobuf
+python-dotenv==1.0.1
+PyYAML==6.0.1
+Requests==2.32.3
+uvicorn==0.30.6
+# transformers==4.43.3
+# google-generativeai
+# groq
+faiss-gpu
+salesforce-lavis
+typer==0.3.2

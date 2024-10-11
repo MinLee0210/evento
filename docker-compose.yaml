@@ -1,0 +1,15 @@
+name: hcmc-aic-2024
+
+services:
+  web:
+    build: ./backend
+    container_name: hcmc-backend
+    command: sh -c "pwd && ls -la && cd /backend/app && uvicorn main:app --reload --host=0.0.0.0"
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/app  # Mount application code only
+      - ./backend:/db
+    environment:
+      - PYTORCH_CUDA_VISIBLE_DEVICES=0  # Assuming you have one GPU
+

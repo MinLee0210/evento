@@ -1,3 +1,11 @@
+/backend/db/features
+/backend/db/media-info
+/backend/db/objects
+/backend/db/s_optimized_keyframes
+/backend/db/keyframes.csv
+/backend/db/vid_url.json
+/backend/db/url_fps.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

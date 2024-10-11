@@ -1,0 +1,32 @@
+# Ignore Python cache files
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore Python virtual environment files
+env
+
+# Ignore pip log files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Ignore testing and coverage files
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+
+# Ignore IDE and testing cache files
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# Ignore Git and draft files
+.git
+/draft
+/test
