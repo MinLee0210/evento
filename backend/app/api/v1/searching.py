@@ -19,6 +19,7 @@ def search_by_text(query: str, top_k: int, vector_store, vid_url:dict, url_fps:d
     """
     scores, idx_image, infos_query, image_paths = vector_store.text_search(query, top_k)
     vid_urls = []
+    embed_urls = []
     frames = []
     infos_query = [info.split('/')[-1] for info in infos_query]
     image_paths = [image_path.split('/')[-1] for image_path in image_paths]
@@ -26,15 +27,18 @@ def search_by_text(query: str, top_k: int, vector_store, vid_url:dict, url_fps:d
         vid_id = img_id.split('.')[0]
         vid_name, frame = vid_id.split('-')
         url = vid_url[vid_name] + '&t=' + str(int(int(frame)/url_fps[vid_url[vid_name]]))
-        url = url.replace('watch?v=', 'embed/') # TODO: make this execuate from frontend
+        embed_url = vid_url[vid_name].replace('watch?v=', 'embed/') # TODO: make this execuate from frontend
         vid_urls.append(url)
+        embed_urls.append(embed_url)
         frames.append(frame)
+
     return {
         'scores': scores.tolist(),
         'idx_image': idx_image.tolist(),
         'infos_query': infos_query, 
         # 'image_paths': image_paths
         'vid_urls': vid_urls, 
+        'embed_urls': embed_urls, 
         'frames': frames
     }
 

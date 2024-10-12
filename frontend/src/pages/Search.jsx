@@ -34,10 +34,12 @@ const Search = () => {
           Array.isArray(data.idx_image) &&
           Array.isArray(data.infos_query) && 
           Array.isArray(data.vid_urls) && 
+          Array.isArray(data.embed_urls) && 
           Array.isArray(data.frames) && 
           data.scores[0].length === data.idx_image.length &&
           data.scores[0].length === data.infos_query.length &&
           data.scores[0].length === data.vid_urls.length &&
+          data.scores[0].length === data.embed_urls.length &&
           data.scores[0].length === data.frames.length
         ) {
           const results = data.idx_image.map((path, index) => ({
@@ -46,6 +48,7 @@ const Search = () => {
             id: data.idx_image[index], 
             thumbnail_id: data.infos_query[index], 
             vid_url: data.vid_urls[index], 
+            embed_url: data.embed_urls[index], 
             frame: data.frames[index], 
           }));
           setSearchResults(results);
@@ -223,13 +226,18 @@ const MediaModal = ({ item, onClose, onSearchSimilar }) => {
             // src={item.vid_url} 
             // controls 
             // className="w-full h-full" />
-            <iframe
-            id="displayFrame"
-            src={item.vid_url} 
-            controls 
-            className="w-full h-full"
-            frameborder="0"
-          />
+            <a href={item.vid_url} 
+            target="_blank" 
+            rel="noopener noreferrer">
+              <iframe
+              id="displayFrame"
+              src={item.embed_url} 
+              controls 
+              className="w-full h-full"
+              frameborder="1"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            />
+            </a>
           )}
         </div>
         <p className="mb-4 text-lg font-semibold">Keyframe: {item.frame}</p>
