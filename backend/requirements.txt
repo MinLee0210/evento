@@ -1,14 +1,16 @@
-fastapi==0.112.3
+faiss_gpu==1.7.2
+fastapi==0.115.0
+fuzzywuzzy==0.18.0
 googletrans==4.0.0rc1
+numpy==2.1.2
+opencv_python_headless==4.5.5.64
+pandas==2.2.3
 Pillow==10.4.0
-protobuf
-python-dotenv==1.0.1
-PyYAML==6.0.1
+protobuf==5.28.2
+rapidfuzz==3.10.0
 Requests==2.32.3
-uvicorn==0.30.6
-# transformers==4.43.3
-# google-generativeai
-# groq
-faiss-gpu
-salesforce-lavis
-typer==0.3.2
+salesforce_lavis==1.0.2
+scikit_learn==1.5.2
+torch==2.4.1+cu118
+translate==3.6.1
+uvicorn==0.31.1

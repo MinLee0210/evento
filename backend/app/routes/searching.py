@@ -26,7 +26,7 @@ async def search_text(request: Request):
         payload = json.loads(payload)
 
         logging.info("search_text: get data from request ...")
-        query, top_k = payload['query'], payload['top_k']
+        query, top_k = payload['query'], payload['kNeighbors']
         translator = request.app.state.translator
         vector_store = request.app.state.vector_store
 
