@@ -3,8 +3,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Mic, Image as ImageIcon, Search as SearchIcon, X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom'; // Change here
+import { ReactPlayer } from 'react-player';
+import axios from 'axios';
 
+import { fetchSearchResults } from '../api/search';
 const Search = () => {
   const [query, setQuery] = useState('');
   const [kNeighbors, setKNeighbors] = useState(50); // Default 50
@@ -12,24 +14,55 @@ const Search = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [shouldShowReload, setShouldShowReload] = useState(false); // For "Load Again" button
-  const navigate = useNavigate(); // Change here
 
-  const handleSearch = () => {
-    
-    console.log('Searching with:', { query, kNeighbors, strength });
-
-    setSearchResults(Array(kNeighbors).fill().map((_, i) => ({
-      id: i,
-      type: i % 3 === 0 ? 'video' : 'image',
-      url: i % 3 === 0 
-        ? `https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4` 
-        : `https://picsum.photos/1600/900?random=${i}`,
-      code: `ITEM_${i.toString().padStart(4, '0')}`,
-    })));
-
-    
-    if (query) {
-      router.push(`/search/${query}`);
+  const handleSearch = async () => {
+    try {
+      const query_info = {
+        query: query,
+        top_k: kNeighbors,
+      };
+  
+      const response = await axios.post(BACKEND_URL_SEARCH, JSON.stringify(query_info));
+  
+      if (response.status === 200) {
+        const data = response.data;
+  
+        // Critical validation!  Check if the structure is as expected
+        if (
+          data &&
+          Array.isArray(data.scores) &&
+          Array.isArray(data.idx_image) &&
+          Array.isArray(data.infos_query) && 
+          Array.isArray(data.vid_urls) && 
+          Array.isArray(data.embed_urls) && 
+          Array.isArray(data.frames) && 
+          data.scores[0].length === data.idx_image.length &&
+          data.scores[0].length === data.infos_query.length &&
+          data.scores[0].length === data.vid_urls.length &&
+          data.scores[0].length === data.embed_urls.length &&
+          data.scores[0].length === data.frames.length
+        ) {
+          const results = data.idx_image.map((path, index) => ({
+            path,
+            score: data.scores[0][index], // Extract the score at the correct index
+            id: data.idx_image[index], 
+            thumbnail_id: data.infos_query[index], 
+            vid_url: data.vid_urls[index], 
+            embed_url: data.embed_urls[index], 
+            frame: data.frames[index], 
+          }));
+          setSearchResults(results);
+        } else {
+          console.error("Invalid response structure from the server.");
+          setSearchResults([]); // Important: Handle unexpected data.
+        }
+      } else {
+        console.error("Error fetching search results:", response.status, response.data);
+        setSearchResults([]); // Important: Set to empty array on server error
+      }
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+      setSearchResults([]); // Handle any other error.
     }
   };
 
@@ -149,20 +182,13 @@ const MediaItem = ({ item, onClick }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {item.type === 'image' ? (
-        <img src={item.url} alt={item.code} className="object-cover w-full h-full" />
-      ) : (
-        <video 
-          ref={videoRef}
-          src={item.url} 
-          className="object-cover w-full h-full" 
-          loop 
-          muted 
-          playsInline
-        />
-      )}
+      {
+      <img src={`${BACKEND_URL_GET_IMAGE}/${item.thumbnail_id}`} alt={item.id} className="object-cover w-full h-full" />
+      }
+
+
       <div className="absolute bottom-0 left-0 right-0 p-2 text-sm text-white bg-black bg-opacity-50">
-        {item.code}
+        {item.id}
       </div>
     </div>
   );
@@ -194,12 +220,27 @@ const MediaModal = ({ item, onClose, onSearchSimilar }) => {
         </button>
         <div className="mb-4 aspect-video">
           {item.type === 'image' ? (
-            <img src={item.url} alt={item.code} className="object-contain w-full h-full" />
+            <img src={item.thumbnail_id} alt={item.code} className="object-contain w-full h-full" />
           ) : (
-            <video src={item.url} controls className="w-full h-full" />
+            // <video 
+            // src={item.vid_url} 
+            // controls 
+            // className="w-full h-full" />
+            <a href={item.vid_url} 
+            target="_blank" 
+            rel="noopener noreferrer">
+              <iframe
+              id="displayFrame"
+              src={item.embed_url} 
+              controls 
+              className="w-full h-full"
+              frameborder="1"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            />
+            </a>
           )}
         </div>
-        <p className="mb-4 text-lg font-semibold">Keyframe: {item.code}</p>
+        <p className="mb-4 text-lg font-semibold">Keyframe: {item.frame}</p>
         <p className='text-lg font-semibold'>Title Video or IMG</p>
         <p className='mt-4 mb-10 text-sm font-semibold text-slate-700'>Description</p>
         <Button onClick={onSearchSimilar}>Search Similar</Button>

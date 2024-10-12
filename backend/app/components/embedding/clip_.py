@@ -18,10 +18,11 @@ class ClipTool(BaseTool):
 
         # TODO: change model_name -> model_id for uniquity in naming.
         self.model_name, self.bin_name = self.SUPPORTED_MODELS[model_id]
+        self.device = device
+
         self.model = CLIPModel.from_pretrained(self.model_name).to(self.device)
         self.image_processor = CLIPImageProcessor.from_pretrained(self.model_name)
         self.text_processor = CLIPTokenizer.from_pretrained(self.model_name)
-        self.device = device
 
     def run(self, input_data: object, is_numpy: bool = True) -> object:
         """

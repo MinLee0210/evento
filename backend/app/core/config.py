@@ -23,7 +23,7 @@ class Environment:
         "format": ".webp"
     }
     vid_url = "vid_url.json"
-
+    url_fps = "url_fps.json"
 
 @dataclass
 class Config:
