@@ -11,7 +11,7 @@ from components.base import BaseTool
 
 class RapidOCRTool(BaseTool):
     """
-    RapidOCRTool class for performing Rapid string matching on OCR text.
+    RapidOCRTool class for performing rapid string matching on OCR text.
 
     Args:
         csv_path (str): Path to the CSV file containing OCR data.

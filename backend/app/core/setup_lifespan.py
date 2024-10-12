@@ -1,4 +1,5 @@
 import os
+import json
 import glob
 from contextlib import asynccontextmanager
 
@@ -40,6 +41,12 @@ async def lifespan(app):
     for i, img_path in enumerate(lst_keyframes):
         id2img_fps[i] = img_path
 
+    with open(os.path.join(env_dir.root, env_dir.db_root, env_dir.vid_url), 'r') as f:
+        app.state.vid_url = json.load(f)
+        
+    with open(os.path.join(env_dir.root, env_dir.db_root, env_dir.url_fps), 'r') as f:
+        app.state.url_fps = json.load(f)
+        
     # Setup Translator
     logging.info("Setup Translator ...")
     app.state.translator = config.translator

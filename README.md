@@ -106,7 +106,7 @@ Additionally, we have 2 other appoaches to download. You can read the detail fro
 Back-end port: 8000
 
 - `GET` - http://localhost:8000/ : Get a random quote, check basic connection to db, 
-- `POST` - http://localhost:8000/search : Search by text (At the moment). 
+- `GET` - http://localhost:8000/search : Search by text (At the moment). 
 - `GET` - http://localhost:8000/search/{image_idx} : Get image by image_idx.
 
 _Note:_ Detail about how to get response after running the app successfully is in [notebook](notebooks/dev_search_text_api.ipynb)
