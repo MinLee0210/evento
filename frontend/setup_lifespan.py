@@ -1,0 +1,20 @@
+import streamlit as st
+
+
+# TODO: Make it read from a declarative file.
+def set_session_state(): 
+    # Initialize session state variables
+    if 'expander_content' not in st.session_state:
+        st.session_state['expander_content'] = None
+
+    if 'copy_to_clipboard' not in st.session_state:
+        st.session_state['copy_to_clipboard'] = None
+
+    if 'selected_images' not in st.session_state:
+        st.session_state['selected_images'] = {}
+
+    if 'checkbox_states' not in st.session_state:
+        st.session_state['checkbox_states'] = {}
+
+    if 'search_results' not in st.session_state:
+        st.session_state['search_results'] = None
