@@ -4,10 +4,11 @@ import json
 from fastapi import APIRouter, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from api.v1.searching import search_by_text
+from api.v1.searching import search_by_text, search_by_image_online
 
 from core.config import Environment
 from core.logger import set_logger
+from utils.helpers import is_url
 
 search_route = APIRouter(
     prefix="/search"
@@ -22,7 +23,6 @@ async def search_text(request: Request):
     retries = 3
 
     try: 
-
         logging.info("Invoke search_text ...")
         payload = await request.json()
         
@@ -33,30 +33,33 @@ async def search_text(request: Request):
                 print(type(payload))
                 if type(payload) == dict: 
                     break
-                
                 retries -= 1
 
         logging.info("search_text: get data from request ...")
         query = payload.get("query")
         top_k = payload.get("top_k", 20)  # Default to 20 if not provided
+        high_performance = payload.get('high_performance', 'clip')
 
         if not query:
             raise HTTPException(status_code=400, detail="Missing query parameter")
-
-
+        
         # Validate top_k
         if not isinstance(top_k, int) or top_k <= 0:
           raise HTTPException(status_code=400, detail="Invalid top_k value. Must be a positive integer.")
         
-        translator = request.app.state.translator
-        vector_store = request.app.state.vector_store_clip
+        vector_store = request.app.state.vector_store['blip']
+        if is_url(query): 
+            logging.info("query is an URL")
+            results = search_by_image_online(query, top_k, vector_store, request.app.state.vid_url, request.app.state.url_fps)
+        else: 
+            logging.info("query is not an URL")
+            translator = request.app.state.translator
+            logging.info("search_text: start querying ...")
+            translated_query = translator.run(query)
+            logging.debug(translated_query)
 
-        logging.info("search_text: start querying ...")
-        translated_query = translator.run(query)
-        logging.debug(translated_query)
-
-        results = search_by_text(translated_query, top_k, vector_store, request.app.state.vid_url, request.app.state.url_fps)
-        
+            results = search_by_text(translated_query, top_k, vector_store, request.app.state.vid_url, request.app.state.url_fps)
+            
         #  Crucially, check the structure of your results
         if not isinstance(results, dict) or not all(k in results for k in ["scores", "idx_image", "infos_query", "vid_urls", "frames"]):
            raise HTTPException(status_code=500, detail="Invalid response format from search_images function.")
