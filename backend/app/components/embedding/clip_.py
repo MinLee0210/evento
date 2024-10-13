@@ -1,3 +1,4 @@
+import PIL
 from PIL import Image
 
 from transformers import CLIPModel, CLIPImageProcessor, CLIPTokenizer
@@ -24,9 +25,9 @@ class ClipTool(BaseTool):
         self.image_processor = CLIPImageProcessor.from_pretrained(self.model_name)
         self.text_processor = CLIPTokenizer.from_pretrained(self.model_name)
 
-    def run(self, input_data: object, is_numpy: bool = True) -> object:
+    def run(self, input_data:object, is_numpy: bool = True) -> object:
         """
-        Runs the BlipTool on the input data.
+        Runs the ClipTool on the input data.
 
         Args:
             input_data (object): The input data to process. Can be a string or a PIL Image.
@@ -38,12 +39,10 @@ class ClipTool(BaseTool):
         Raises:
             TypeError: If the input data is not a string or a PIL Image.
         """
-        if not isinstance(input_data, (str, Image)):
-            raise TypeError("Input data must be a string or a PIL Image.")
 
         if isinstance(input_data, str):
             features = self._extract_text_features(input_data)
-        elif isinstance(input_data, Image):
+        elif isinstance(input_data, PIL.Image.Image):
             features =  self._extract_by_image_features(input_data)
 
         if is_numpy: 
@@ -76,5 +75,5 @@ class ClipTool(BaseTool):
             object: The extracted features.
         """
         image = self.image_processor(images=image, return_tensors="pt").to(self.device)
-        features = self.model.extract_features(**image, mode="image")
+        features = self.model.get_image_features(**image)
         return features

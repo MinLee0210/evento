@@ -1,3 +1,4 @@
+import PIL
 from PIL import Image
 
 import torch
@@ -55,14 +56,14 @@ class BlipTool(BaseTool):
         Raises:
             TypeError: If the input data is not a string or a PIL Image.
         """
-        if not isinstance(input_data, (str, Image)):
+        if not isinstance(input_data, (str, PIL.Image.Image)):
             raise TypeError("Input data must be a string or a PIL Image.")
 
         if isinstance(input_data, str):
             features = self._extract_text_features(input_data)
             if is_numpy: 
                 features = features.text_embeds_proj[:, 0, :].detach().cpu().numpy()
-        elif isinstance(input_data, Image):
+        elif isinstance(input_data, PIL.Image.Image):
             features =  self._extract_by_image_features(input_data)
 
             if is_numpy: 

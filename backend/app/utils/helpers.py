@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import json
 import yaml
@@ -76,3 +77,18 @@ def dynamic_dirname(path, depth):
 
 def ignore_warning():
     warnings.filterwarnings("ignore")
+
+
+def is_url(query):
+  """Checks if a given query is a URL.
+
+  Args:
+    query: The query to check.
+
+  Returns:
+    True if the query is a URL, False otherwise.
+  """
+
+  url_pattern = r"^(http|https)://([\w\d-]+\.)+[\w\d-]+\/([\w\d./?%&amp;=]*)?"
+
+  return re.match(url_pattern, query) is not None

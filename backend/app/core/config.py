@@ -4,7 +4,8 @@ from dataclasses import dataclass
 import torch
 
 from components.translation import GoogleTranslator
-from components.embedding.clip_ import ClipTool
+# from components.embedding.clip_ import ClipTool
+from components.embedding.blip_ import BlipTool
 from services.vector_store import VectorStore
 from utils.helpers import ignore_warning
 
@@ -31,7 +32,8 @@ class Config:
     # device = 'cpu'
     environment = Environment()
     translator = GoogleTranslator()
-    embedding_model = ClipTool(device=device)
+    # embedding_model_clip = ClipTool(device=device)
+    embedding_model_blip = BlipTool(device=device)
 
     # TODO: Make this fix based on settings on this file, not in `setup_lifespan`
     vector_store = VectorStore

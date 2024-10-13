@@ -54,16 +54,30 @@ async def lifespan(app):
     
     # Setup Embedding Model
     logging.info("Setup Embedding Model ...")
-    app.state.embedding_model = config.embedding_model
+    app.state.embedding_model = config.embedding_model_blip
+    # app.state.embedding_model_clip = config.embedding_model_clip
+    # app.state.embedding_model = {
+    #     'clip': config.embedding_model_clip, 
+    #     'blip': config.embedding_model_blip
+    # }
 
 
     # Setup Vector Store
     logging.info("Setup Vector Store ...")
     db_features = os.path.join(env_dir.db_root, env_dir.features)
     # project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-    bin_file= os.path.join(env_dir.root, db_features, f'{config.embedding_model.bin_name}.bin')
-    vector_store = config.vector_store(env_dir.root, bin_file, id2img_fps, config.device, config.embedding_model)
-    app.state.vector_store = vector_store
+    bin_file= os.path.join(env_dir.root, db_features, f'{config.embedding_model_blip.bin_name}.bin')
+    # vector_store_clip = config.vector_store(env_dir.root, bin_file, id2img_fps, config.device, config.embedding_model_clip)
+
+
+    app.state.vector_store = {
+        # 'clip': config.vector_store(env_dir.root, bin_file, id2img_fps, config.device, config.embedding_model_clip),
+        'blip': config.vector_store(env_dir.root, bin_file, id2img_fps, config.device, config.embedding_model_blip)
+    }
+    # app.state.vector_store = {
+    #     'clip': config.vector_store(env_dir.root, bin_file, id2img_fps, config.device, config.embedding_model_clip),
+    # }
+
 
     yield
     
@@ -74,3 +88,4 @@ async def lifespan(app):
     del app.state.vector_store    
 
     logging.info("DONE!!!")
+
