@@ -29,6 +29,7 @@ async def search_text(request: Request):
         if isinstance(payload, str): 
             logging.info("search_text: converting string to json")
             while retries >= 0: 
+                # Normally, it executes 2 times and break.
                 payload = json.loads(payload)
                 print(type(payload))
                 if type(payload) == dict: 
