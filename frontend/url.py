@@ -1,3 +1,5 @@
+# TODO: This should be in .env file
+
 BACKEND_URL="http://localhost:8000"
 
 # GET METHOD 

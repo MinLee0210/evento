@@ -33,7 +33,7 @@ class Config:
     environment = Environment()
     translator = GoogleTranslator()
     embedding_model_clip = ClipTool(device=device)
-    embedding_model_blip = BlipTool(device=device)
+    # embedding_model_blip = BlipTool(device=device)
 
     # TODO: Make this fix based on settings on this file, not in `setup_lifespan`
     vector_store = VectorStore

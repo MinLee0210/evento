@@ -18,3 +18,12 @@ def set_session_state():
 
     if 'search_results' not in st.session_state:
         st.session_state['search_results'] = None
+
+    if 'top_k' not in st.session_state: 
+        st.session_state['top_k'] = None
+
+    if 'query' not in st.session_state: 
+        st.session_state['query'] = None
+    
+    if 'high_performance' not in st.session_state: 
+        st.session_state['high_performance'] = None

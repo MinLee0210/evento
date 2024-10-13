@@ -19,13 +19,23 @@ logging = set_logger()
 @search_route.post("/")
 async def search_text(request: Request): 
     # Search related images based on text-based query.
+    retries = 3
+
     try: 
 
         logging.info("Invoke search_text ...")
         payload = await request.json()
         
         if isinstance(payload, str): 
-            payload = json.loads(payload)
+            logging.info("search_text: converting string to json")
+            while retries >= 0: 
+                payload = json.loads(payload)
+                print(type(payload))
+                if type(payload) == dict: 
+                    break
+                
+                retries -= 1
+
         logging.info("search_text: get data from request ...")
         query = payload.get("query")
         top_k = payload.get("top_k", 20)  # Default to 20 if not provided
@@ -39,7 +49,7 @@ async def search_text(request: Request):
           raise HTTPException(status_code=400, detail="Invalid top_k value. Must be a positive integer.")
         
         translator = request.app.state.translator
-        vector_store = request.app.state.vector_store
+        vector_store = request.app.state.vector_store_clip
 
         logging.info("search_text: start querying ...")
         translated_query = translator.run(query)
