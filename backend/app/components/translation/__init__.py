@@ -15,5 +15,5 @@ class TranslatorFactory(BaseToolFactory):
                     return GoogleTranslator(**kwargs)
                 case 'py_translate': 
                     return PyTranslator(**kwargs)
-        except: 
-            raise ValueError(f"{provider} is not supported")
+        except Exception  as e: 
+            raise ValueError(e)

@@ -10,8 +10,8 @@ except ImportError:
         "`pip install 'groq'`."
     )
 
-from backend.app.components.llms.base import BaseAgent
-from backend.app.components.llms.prompts import SYSTEM_PROMPT
+from components.llms.base import BaseAgent
+from .prompts import EXTRACT_KEYWORDS
 class GroqAgent(BaseAgent):
 
     SUPPORTED_MODEL = {
@@ -24,7 +24,7 @@ class GroqAgent(BaseAgent):
                 api_key: Optional[str] = None,
                 model_name: str='llama3-8b',
                 max_retries:int=5,
-                system_prompt:str=SYSTEM_PROMPT
+                system_prompt:str=EXTRACT_KEYWORDS
                 ):
                 
         self.system_prompt=system_prompt

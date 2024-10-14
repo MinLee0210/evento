@@ -4,7 +4,7 @@ import os
 import requests
 from typing import Any, Optional, Dict
 from components.llms.base import BaseAgent
-
+from schema.llm_response import Keyword
 try:
     import google.generativeai as genai
 except ImportError:
@@ -27,7 +27,7 @@ class GeminiAgent(BaseAgent):
                 api_key: Optional[str]=None,
                 model_name: Optional[str]='models/gemini-1.5-flash',
                 safety_settings: "genai.types.SafetySettingOptions" = SAFETY_SETTINGS, 
-                system_prompt:str=None,
+                system_prompt:str="",
                 **gen_config: Any
                 ):
 
@@ -62,11 +62,13 @@ class GeminiAgent(BaseAgent):
             messages = [{"role": "user", "parts": input}]
             if self.system_prompt:
                 sys_msg = {
-                    "role": "system", 
+                    "role": "model", 
                     "parts": [self.system_prompt]
                 }
                 messages.insert(0, sys_msg)
-            response = self.model.generate_content(messages)
+            response = self.model.generate_content(messages, 
+                                                   generation_config=genai.GenerationConfig(response_mime_type="application/json", 
+                                                                                            response_schema=list[Keyword]))
             if text_only:
                 return response.text
             return response

@@ -9,7 +9,7 @@ from core.config import Config
 from components.base import BaseTool
 
 
-class FuzzyOCRTool(BaseTool):
+class FuzzyMatchingTool(BaseTool):
     """
     FuzzyOCRTool class for performing fuzzy string matching on OCR text.
 
@@ -22,7 +22,9 @@ class FuzzyOCRTool(BaseTool):
 
     def __init__(self, csv_path: str, mode: int = 0, limit: int = 10, separator: str = "|"):
         super().__init__()
-        self.csv_path = csv_path
+        self.env_dir = Config().environment
+        # self.csv_path = csv_path
+        self.csv_path = os.path.join(self.env_dir.root, self.env_dir.db_root, self.env_dir.keyframes)
         self.mode = mode
         self.limit = limit
         self.separator = separator
@@ -43,7 +45,7 @@ class FuzzyOCRTool(BaseTool):
             list: A list of best matches, each containing the match score and the corresponding OCR text.
         """
 
-        fuzz = [None, fuwu_fuzz.ratio, fuwu_fuzz.partial_ratio, fuwu_fuzz.token_sort_ratio, fuwu_fuzz.token_set_ratio, fuwu_fuzz.QRatio, fuwu_fuzz.WRatio]
+        fuzz = [fuwu_fuzz.ratio, fuwu_fuzz.partial_ratio, fuwu_fuzz.token_sort_ratio, fuwu_fuzz.token_set_ratio, fuwu_fuzz.QRatio, fuwu_fuzz.WRatio]
         best_match = fuwu_process.extract(input, self.imgs_ocr, scorer=fuzz[self.mode], limit=self.limit)
         return best_match
 
@@ -75,9 +77,7 @@ class FuzzyOCRTool(BaseTool):
         """
         Sets a mapping between keyframe IDs and image file paths.
         """
-
-        env_dir = Config().environment
-        lst_keyframes = glob.glob(os.path.join(env_dir.root, env_dir.db_root, f"{env_dir.lst_keyframes['path']}", f"*{env_dir.lst_keyframes['format']}"))
+        lst_keyframes = glob.glob(os.path.join(self.env_dir.root, self.env_dir.db_root, f"{self.env_dir.lst_keyframes['path']}", f"*{self.env_dir.lst_keyframes['format']}"))
         lst_keyframes.sort()
 
         self.id2img_fps = {i: img_path for i, img_path in enumerate(lst_keyframes)}

@@ -9,7 +9,7 @@ from core.config import Config
 from components.base import BaseTool
 
 
-class RapidOCRTool(BaseTool):
+class RapidMatchingTool(BaseTool):
     """
     RapidOCRTool class for performing rapid string matching on OCR text.
 
@@ -20,9 +20,12 @@ class RapidOCRTool(BaseTool):
         separator (str, optional): Separator used in the CSV file. Defaults to "|".
     """
 
-    def __init__(self, csv_path: str, mode: int = 0, limit: int = 10, separator: str = "|"):
+    def __init__(self, csv_path: str=None, mode: int = 0, limit: int = 10, separator: str = "|"):
         super().__init__()
-        self.csv_path = csv_path
+        # self.csv_path = csv_path
+        self.env_dir = Config().environment
+        # self.csv_path = csv_path
+        self.csv_path = os.path.join(self.env_dir.root, self.env_dir.db_root, self.env_dir.keyframes)
         self.mode = mode
         self.limit = limit
         self.separator = separator
@@ -43,7 +46,7 @@ class RapidOCRTool(BaseTool):
             list: A list of best matches, each containing the match score and the corresponding OCR text.
         """
 
-        fuzz = [_, rafu_fuzz.ratio, rafu_fuzz.partial_ratio, rafu_fuzz.token_sort_ratio, rafu_fuzz.token_set_ratio, rafu_fuzz.QRatio, rafu_fuzz.WRatio, rafu_fuzz.partial_token_sort_ratio, rafu_fuzz.partial_token_set_ratio]
+        fuzz = [rafu_fuzz.ratio, rafu_fuzz.partial_ratio, rafu_fuzz.token_sort_ratio, rafu_fuzz.token_set_ratio, rafu_fuzz.QRatio, rafu_fuzz.WRatio, rafu_fuzz.partial_token_sort_ratio, rafu_fuzz.partial_token_set_ratio]
         best_match = rafu_process.extract(input, self.imgs_ocr, scorer=fuzz[self.mode], limit=self.limit)
         return best_match
 
@@ -71,16 +74,16 @@ class RapidOCRTool(BaseTool):
             for key, value in imgs_ocr.items()
         }
 
+
     def _set_id2img_fps(self):
         """
         Sets a mapping between keyframe IDs and image file paths.
         """
-
-        env_dir = Config().environment
-        lst_keyframes = glob.glob(os.path.join(env_dir.root, env_dir.db_root, f"{env_dir.lst_keyframes['path']}", f"*{env_dir.lst_keyframes['format']}"))
+        lst_keyframes = glob.glob(os.path.join(self.env_dir.root, self.env_dir.db_root, f"{self.env_dir.lst_keyframes['path']}", f"*{self.env_dir.lst_keyframes['format']}"))
         lst_keyframes.sort()
 
         self.id2img_fps = {i: img_path for i, img_path in enumerate(lst_keyframes)}
+
 
     def get_image_paths(self, best_matches):
         """

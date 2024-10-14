@@ -23,6 +23,7 @@ class Environment:
         'path': "s_optimized_keyframes", 
         "format": ".webp"
     }
+    keyframes = 'keyframes.csv'
     vid_url = "vid_url.json"
     url_fps = "url_fps.json"
 
