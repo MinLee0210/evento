@@ -18,12 +18,19 @@ def read_yaml(file_path: str) -> dict:
 
 
 def json_to_str(payload: dict) -> str:
-    return json.dumps(payload)
+    payload = json.dumps(payload)
+    if isinstance(payload, str): 
+        return payload
+    raise Exception("Something wrong in this json_to_str function")
 
-
-def str_to_json(payload: str) -> dict:
+def str_to_json(payload: str, retries=4) -> dict:
     try:
-        return json.loads(payload)
+        while retries >= 0: 
+            payload = json.loads(payload)
+            if isinstance(payload, dict): 
+                break
+            retries -= 1
+        return payload
     except json.JSONDecodeError as e:
         raise ValueError(f"Invalid JSON string: {e}")
 

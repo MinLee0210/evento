@@ -4,7 +4,7 @@ import os
 import requests
 from typing import Any, Optional, Dict
 from components.llms.base import BaseAgent
-from schema.llm_response import Keyword
+
 try:
     import google.generativeai as genai
 except ImportError:
@@ -55,7 +55,8 @@ class GeminiAgent(BaseAgent):
             )
 
         super().__init__(api_key, model_name)
-
+        if 'response_setting' in gen_config: 
+            self.response_setting = gen_config['response_setting']
 
     def run(self, input, text_only: bool = True):
         try:
@@ -66,9 +67,9 @@ class GeminiAgent(BaseAgent):
                     "parts": [self.system_prompt]
                 }
                 messages.insert(0, sys_msg)
+            generation_config = genai.GenerationConfig(**self.response_setting)
             response = self.model.generate_content(messages, 
-                                                   generation_config=genai.GenerationConfig(response_mime_type="application/json", 
-                                                                                            response_schema=list[Keyword]))
+                                                   generation_config=generation_config)
             if text_only:
                 return response.text
             return response
@@ -79,3 +80,4 @@ class GeminiAgent(BaseAgent):
 
     def get_model_catalog(self):
         return [m for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+    
