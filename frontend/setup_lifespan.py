@@ -3,7 +3,7 @@ import streamlit as st
 
 def setup_template():
     "Setup theme, style, etc."
-    ...
+    st.set_page_config(layout='wide')
 
 # TODO: Make it read from a declarative file.
 def set_session_state(): 

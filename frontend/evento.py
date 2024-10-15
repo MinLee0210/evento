@@ -2,17 +2,19 @@ import json
 import streamlit as st
 
 from components import setup_column_2, setup_column_1
-from setup_lifespan import set_session_state
+from setup_lifespan import set_session_state, setup_template
 
 
 def main():
+    setup_template()
+    set_session_state()
+
+
     # Title with gradient and centered
     st.markdown("""
         <h1 style='text-align: center; background: linear-gradient(to right, blue, purple); -webkit-background-clip: text; color: transparent;'>Image Retrieval System - AIC2024</h1>
         """, unsafe_allow_html=True)
 
-    st.set_page_config(layout='wide')
-    set_session_state()
 
     col1, col2 = st.columns([1, 2])
 

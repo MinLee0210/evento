@@ -11,35 +11,31 @@ def setup_column_2():
     #    Added Slider and Checkbox   #
     # ------------------------------ #
 
-    # Slider for K_neighbors
-    K_neighbors = st.slider(
-        "Number of Neighbors (K_neighbors)",
-        min_value=10,
-        max_value=1000,
-        value=100,
-        step=10,
-        help="Adjust the number of nearest neighbors to retrieve."
-    )
+    with st.expander('Settings'): 
+        # Slider for K_neighbors
+        K_neighbors = st.slider(
+            "Number of Neighbors (K_neighbors)",
+            min_value=10,
+            max_value=1000,
+            value=100,
+            step=10,
+            help="Adjust the number of nearest neighbors to retrieve."
+        )
 
-    # Checkbox for high_performance
-    if st.checkbox(
-        "Use High Performance Mode",
-        value=False,
-        help="Toggle to use high performance search mode."
-    ):
-        high_performance = 1
-    else:
-        high_performance = 0
+        # Checkbox for high_performance
+        embed_model_list = ['CLIP', 'BLIP']
+        high_performance = st.radio(
+            "You can choose CLIP-based or BLIP-based",
+            embed_model_list,
+            index=embed_model_list.index('CLIP')
+        )
 
+    tab1, tab2 = st.tabs(["Sentence-based search", "OCR-based search"])
     # Search bar
     text_query = st.text_input("Enter a text query, a frame or an image url", placeholder='Eg: "Cảnh quay một chiếc thuyền cứu hộ đi trên băng..." || "L01_V001, 1" || "https://bitexco.c...scaled.jpg"', key="text_query")
 
     # Determine the model index based on high_performance
-    high_performance = st.radio(
-        "You can choose CLIP-based or BLIP-based",
-        ['CLIP', 'BLIP'],
-        index=None
-    )
+
 
     search_clicked = st.button("Search", key="search_button")
 
