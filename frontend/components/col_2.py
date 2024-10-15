@@ -2,7 +2,7 @@ import json
 
 import streamlit as st
 
-from url import BACKEND_URL_SEARCH_IMAGE, BACKEND_URL_GET_IMAGE
+from url import BACKEND_URL_SEARCH_IMAGE, BACKEND_URL_GET_IMAGE, BACKEND_URL_SEARCH_OCR
 from api.search import search_image_by_text, get_image
 
 def setup_column_2(): 
@@ -11,68 +11,107 @@ def setup_column_2():
     #    Added Slider and Checkbox   #
     # ------------------------------ #
 
-    with st.expander('Settings'): 
-        # Slider for K_neighbors
-        K_neighbors = st.slider(
-            "Number of Neighbors (K_neighbors)",
-            min_value=10,
-            max_value=1000,
-            value=100,
-            step=10,
-            help="Adjust the number of nearest neighbors to retrieve."
-        )
-
-        # Checkbox for high_performance
-        embed_model_list = ['CLIP', 'BLIP']
-        high_performance = st.radio(
-            "You can choose CLIP-based or BLIP-based",
-            embed_model_list,
-            index=embed_model_list.index('CLIP')
-        )
 
     tab1, tab2 = st.tabs(["Sentence-based search", "OCR-based search"])
-    # Search bar
-    text_query = st.text_input("Enter a text query, a frame or an image url", placeholder='Eg: "Cảnh quay một chiếc thuyền cứu hộ đi trên băng..." || "L01_V001, 1" || "https://bitexco.c...scaled.jpg"', key="text_query")
 
-    # Determine the model index based on high_performance
+    with tab1: 
+        with st.expander('Settings'): 
+            # Slider for K_neighbors
+            K_neighbors = st.slider(
+                "Number of Neighbors (K_neighbors)",
+                min_value=10,
+                max_value=1000,
+                value=100,
+                step=10,
+                help="Adjust the number of nearest neighbors to retrieve.", 
+                key="text_search"
+            )
+
+            # Checkbox for high_performance
+            embed_model_list = ['CLIP', 'BLIP']
+            high_performance = st.radio(
+                "You can choose CLIP-based or BLIP-based",
+                embed_model_list,
+                index=embed_model_list.index('CLIP')
+            )
+
+        # Search bar
+        text_query = st.text_input("Enter a text query, a frame or an image url", placeholder='Eg: "Cảnh quay một chiếc thuyền cứu hộ đi trên băng..." || "L01_V001, 1" || "https://bitexco.c...scaled.jpg"', key="text_query_for_text_search")
 
 
-    search_clicked = st.button("Search", key="search_button")
+
+        search_clicked = st.button("Search", key="text_search_button")
 
 
-    if search_clicked and text_query:
-        with st.spinner('Performing search...'):
+        if search_clicked and text_query:
+            with st.spinner('Performing search...'):
 
-            data  = {
-                'query': text_query, 
-                'top_k': K_neighbors
-            }
+                data  = {
+                    'query': text_query, 
+                    'top_k': K_neighbors,
+                    'high_performance': high_performance.lower()
+                }
 
-            try: 
-                response = search_image_by_text(url=BACKEND_URL_SEARCH_IMAGE, data=data)
-                            # Store results in session_state
-                st.session_state['search_results'] = response
+                try: 
+                    response = search_image_by_text(url=BACKEND_URL_SEARCH_IMAGE, data=data)
+                                # Store results in session_state
+                    st.session_state['search_results'] = response
 
-                # Reset checkbox states for new search
-                st.session_state['checkbox_states'] = {}
-                # Reset selected_images for new search
-                st.session_state['selected_images'] = {}
-            except Exception as e: 
-                st.error(e)
+                    # Reset checkbox states for new search
+                    st.session_state['checkbox_states'] = {}
+                    # Reset selected_images for new search
+                    st.session_state['selected_images'] = {}
+                except Exception as e: 
+                    st.error(e)
+
+    with tab2: 
+        with st.expander('Settings'): 
+            # Slider for K_neighbors
+            K_neighbors = st.slider(
+                "Number of Neighbors (K_neighbors)",
+                min_value=10,
+                max_value=1000,
+                value=100,
+                step=10,
+                help="Adjust the number of nearest neighbors to retrieve.",
+                key="ocr_search"
+            )
+
+        # Search bar
+        text_query = st.text_input("Enter a text query, a frame or an image url", placeholder='Eg: "Cảnh quay một chiếc thuyền cứu hộ đi trên băng..." || "L01_V001, 1" || "https://bitexco.c...scaled.jpg"', key="text_query_for_ocr_serch")
+
+
+
+        search_clicked = st.button("Search", key="ocr_search_button")
+
+
+        if search_clicked and text_query:
+            with st.spinner('Performing search...'):
+
+                data  = {
+                    'query': text_query, 
+                    'top_k': K_neighbors,
+                }
+
+                try: 
+                    response = search_image_by_text(url=BACKEND_URL_SEARCH_OCR, data=data)
+                                # Store results in session_state
+                    st.session_state['search_results'] = response
+
+                    # Reset checkbox states for new search
+                    st.session_state['checkbox_states'] = {}
+                    # Reset selected_images for new search
+                    st.session_state['selected_images'] = {}
+                except Exception as e: 
+                    st.error(e)
 
 
     # Display images from session_state if available
     if st.session_state.get('search_results'):
-
-        # with st.spinner('Loading images...'):
-        #     faiss_search[display_index].show_images(st.session_state['search_results'])
-        ...
-
     # Ensure image_id is unique by adding row and column indices
         num_cols = 5  # Adjust as needed
         response =  st.session_state.get('search_results')
 
-        idx_image = response['idx_image']
         infos_query = response['infos_query']
         image_paths = response['image_paths']
         vid_urls = response['vid_urls']
@@ -97,7 +136,7 @@ def setup_column_2():
 
                 with cols[idx]:
                     try:
-                        print(infos_query[row_idx])
+                        # print(infos_query[row_idx])
                         st.image(get_image(url=BACKEND_URL_GET_IMAGE, image_idx=img_path), width=150)  # Set fixed width
                     except Exception as e:
                         st.error(f"Error loading image: {e}")

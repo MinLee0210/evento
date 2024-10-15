@@ -3,7 +3,9 @@ import streamlit as st
 
 def setup_template():
     "Setup theme, style, etc."
-    st.set_page_config(layout='wide')
+    st.set_page_config(layout='wide', 
+                       page_title="evento",
+                       page_icon="⚡️")
 
 # TODO: Make it read from a declarative file.
 def set_session_state(): 

@@ -1,1 +1,1 @@
-streamlit run evento.py
+streamlit run app.py

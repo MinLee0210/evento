@@ -25,7 +25,6 @@ def search_image_by_text(url:str, data:dict):
             raise requests.HTTPError(f"Error {response.status_code}: {response.text}")
     except Exception as e: 
         raise requests.HTTPError(e)
-    
 
 def get_image(url, image_idx): 
     get_image_url = f"{url}/{image_idx}"
