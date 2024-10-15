@@ -1,10 +1,10 @@
 
-# from components.base import BaseToolFactory
+from components.base import BaseToolFactory
 from ._fuzzywuzzy import FuzzyMatchingTool
 from ._rapidwuzzy import RapidMatchingTool
 
 # TODO: Refactor the FuzzyMatching so that it only read from config, not implement config.
-class FuzzyMatchingFactory(): 
+class FuzzyMatchingFactory(BaseToolFactory): 
 
     @staticmethod
     def produce(provider:str='rapidwuzzy', **kwargs): 

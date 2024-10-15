@@ -1,6 +1,10 @@
 import streamlit as st
 
 
+def setup_template():
+    "Setup theme, style, etc."
+    ...
+
 # TODO: Make it read from a declarative file.
 def set_session_state(): 
     # Initialize session state variables

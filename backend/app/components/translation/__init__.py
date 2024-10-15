@@ -1,10 +1,9 @@
 
-# from models.translation.pretrained_models import M2M100Translator, MarianTranslator, PretrainedModelTranslator, EnvT5Translator
+# from .pretrained_models import M2M100Translator, MarianTranslator, PretrainedModelTranslator, EnvT5Translator
 
 from components.base import BaseToolFactory
 from .google_translate import GoogleTranslator
 from .py_translate import PyTranslator
-
 
 class TranslatorFactory(BaseToolFactory): 
     @staticmethod

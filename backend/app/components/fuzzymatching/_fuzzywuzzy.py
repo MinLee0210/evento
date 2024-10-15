@@ -5,7 +5,6 @@ import glob
 import pandas as pd
 from fuzzywuzzy import process as fuwu_process, fuzz as fuwu_fuzz
 
-from core.config import Config
 from components.base import BaseTool
 
 
@@ -20,9 +19,9 @@ class FuzzyMatchingTool(BaseTool):
         separator (str, optional): Separator used in the CSV file. Defaults to "|".
     """
 
-    def __init__(self, csv_path: str, mode: int = 0, limit: int = 10, separator: str = "|"):
+    def __init__(self, env_dir, csv_path: str, mode: int = 0, limit: int = 10, separator: str = "|", ):
         super().__init__()
-        self.env_dir = Config().environment
+        self.env_dir = env_dir
         # self.csv_path = csv_path
         self.csv_path = os.path.join(self.env_dir.root, self.env_dir.db_root, self.env_dir.keyframes)
         self.mode = mode

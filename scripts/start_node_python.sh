@@ -38,7 +38,7 @@ fi
 
 
 echo "Starting backend server..."
-cd ./backend/app/app
+cd ./backend/app
 # Use uvicorn within virtual environment (if activated). This is crucial.
 if [ -n "$VIRTUAL_ENV" ]; then
     uvicorn main:app --reload --host 0.0.0.0 --port 8000

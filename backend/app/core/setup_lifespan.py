@@ -17,15 +17,6 @@ logging = set_logger()
 async def lifespan(app): 
     """
     Sets up and cleans up application resources during the FastAPI lifespan.
-
-    This function is executed during the application startup and shutdown phases.
-    It initializes key components like paths, translator, embedding model,
-    and vector store, and cleans them up during shutdown.
-
-
-    Args:
-        app (FastAPI): The FastAPI application instance.
-        
     """
     logging.info("Setup lifespan ...")
 
@@ -54,36 +45,43 @@ async def lifespan(app):
     
     # Setup Embedding Model
     logging.info("Setup Embedding Model ...")
-    app.state.embedding_model = config.embedding_model_blip
+    # app.state.embedding_model = config.embedding_model_blip
     # app.state.embedding_model_clip = config.embedding_model_clip
-    # app.state.embedding_model = {
-    #     'clip': config.embedding_model_clip, 
-    #     'blip': config.embedding_model_blip
-    # }
+    app.state.embedding_model = {
+        'clip': config.embedding_model_clip, 
+        # 'blip': config.embedding_model_blip
+    }
 
+    # Setup LLM agent
+    app.state.llm_agent = config.llm_agent
+
+    # Setup matching tool
+    app.state.matching_tool = config.ocr_matcher
 
     # Setup Vector Store
     logging.info("Setup Vector Store ...")
     db_features = os.path.join(env_dir.db_root, env_dir.features)
     # project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-    bin_file= os.path.join(env_dir.root, db_features, f'{config.embedding_model_blip.bin_name}.bin')
+    bin_file_clip= os.path.join(env_dir.root, db_features, f'{config.embedding_model_clip.bin_name}.bin')
+    # bin_file_blip= os.path.join(env_dir.root, db_features, f'{config.embedding_model_blip.bin_name}.bin')
     # vector_store_clip = config.vector_store(env_dir.root, bin_file, id2img_fps, config.device, config.embedding_model_clip)
 
 
     app.state.vector_store = {
-        # 'clip': config.vector_store(env_dir.root, bin_file, id2img_fps, config.device, config.embedding_model_clip),
-        'blip': config.vector_store(env_dir.root, bin_file, id2img_fps, config.device, config.embedding_model_blip)
+        'clip': config.vector_store(env_dir.root, bin_file_clip, id2img_fps, config.device, config.embedding_model_clip),
+        # 'blip': config.vector_store(env_dir.root, bin_file, id2img_fps, config.device, config.embedding_model_blip)
     }
     # app.state.vector_store = {
     #     'clip': config.vector_store(env_dir.root, bin_file, id2img_fps, config.device, config.embedding_model_clip),
     # }
-
 
     yield
     
     logging.info("Clean up lifespan ...")
 
     del app.state.translator
+    del app.state.matching_tool
+    del app.state.llm_agent
     del app.state.embedding_model
     del app.state.vector_store    
 

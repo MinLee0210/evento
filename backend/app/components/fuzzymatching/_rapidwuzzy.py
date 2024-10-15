@@ -5,7 +5,6 @@ import glob
 import pandas as pd
 from rapidfuzz import process as rafu_process, fuzz as rafu_fuzz
 
-from core.config import Config
 from components.base import BaseTool
 
 
@@ -20,10 +19,10 @@ class RapidMatchingTool(BaseTool):
         separator (str, optional): Separator used in the CSV file. Defaults to "|".
     """
 
-    def __init__(self, csv_path: str=None, mode: int = 0, limit: int = 10, separator: str = "|"):
+    def __init__(self, env_dir, csv_path: str=None, mode: int = 0, limit: int = 10, separator: str = "|"):
         super().__init__()
         # self.csv_path = csv_path
-        self.env_dir = Config().environment
+        self.env_dir = env_dir
         # self.csv_path = csv_path
         self.csv_path = os.path.join(self.env_dir.root, self.env_dir.db_root, self.env_dir.keyframes)
         self.mode = mode
@@ -35,7 +34,7 @@ class RapidMatchingTool(BaseTool):
 
         self._set_id2img_fps()
 
-    def run(self, input):
+    def run(self, input, top_k:int=10):
         """
         Performs Rapid string matching on OCR text.
 
@@ -47,7 +46,7 @@ class RapidMatchingTool(BaseTool):
         """
 
         fuzz = [rafu_fuzz.ratio, rafu_fuzz.partial_ratio, rafu_fuzz.token_sort_ratio, rafu_fuzz.token_set_ratio, rafu_fuzz.QRatio, rafu_fuzz.WRatio, rafu_fuzz.partial_token_sort_ratio, rafu_fuzz.partial_token_set_ratio]
-        best_match = rafu_process.extract(input, self.imgs_ocr, scorer=fuzz[self.mode], limit=self.limit)
+        best_match = rafu_process.extract(input, self.imgs_ocr, scorer=fuzz[self.mode], limit=top_k)
         return best_match
 
     def load_keyframes(self):
@@ -96,4 +95,4 @@ class RapidMatchingTool(BaseTool):
             list: A list of image file paths.
         """
 
-        return [self.id2img_fps[img[-1]] for img in best_matches]
+        return [self.id2img_fps[img[-1]].split('/')[-1] for img in best_matches]

@@ -4,11 +4,12 @@ import json
 from fastapi import APIRouter, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from api.v1.searching import search_by_text, search_by_image_online
 
 from core.config import Environment
 from core.logger import set_logger
 from utils.helpers import is_url
+
+from api.v1.searching import search_by_text, search_by_image_online, search_by_ocr
 
 search_route = APIRouter(
     prefix="/search"
@@ -48,7 +49,10 @@ async def search_text(request: Request):
         if not isinstance(top_k, int) or top_k <= 0:
           raise HTTPException(status_code=400, detail="Invalid top_k value. Must be a positive integer.")
         
-        vector_store = request.app.state.vector_store['blip']
+        if high_performance is not 'clip' or high_performance is not 'blip': 
+          raise HTTPException(status_code=400, detail="Not supported `high_performance`'s input value. Please choose between `clip` and `blip`.")
+        
+        vector_store = request.app.state.vector_store[high_performance]
         if is_url(query): 
             logging.info("query is an URL")
             results = search_by_image_online(query, top_k, vector_store, request.app.state.vid_url, request.app.state.url_fps)
@@ -81,6 +85,50 @@ async def search_text(request: Request):
         # Better error handling, log error and return specific error message
         print(f"An error occurred: {e}")  # Log the exception for debugging
         return JSONResponse({"error": str(e)}, status_code=500)
+
+
+@search_route.post('/ocr')
+async def search_with_ocr_matching(request:Request):
+    retries = 3
+    try: 
+        logging.info("Invoke search_with_ocr_matching ...")
+        payload = await request.json()
+        
+        if isinstance(payload, str): 
+            logging.info("search_with_ocr_matching: converting string to json")
+            while retries >= 0: 
+                # Normally, it executes 2 times and break.
+                payload = json.loads(payload)
+                print(type(payload))
+                if type(payload) == dict: 
+                    break
+                retries -= 1
+
+        logging.info("search_with_ocr_matching: get data from request ...")
+        query = payload.get("query")
+        top_k = payload.get("top_k", 20)  # Default to 20 if not provided
+        if not query:
+            raise HTTPException(status_code=400, detail="Missing query parameter")
+        
+        # Validate top_k
+        if not isinstance(top_k, int) or top_k <= 0:
+          raise HTTPException(status_code=400, detail="Invalid top_k value. Must be a positive integer.")
+        
+        logging.info("search_with_ocr_matching: start searching ...")
+        results = search_by_ocr(query=query, 
+                                top_k=top_k, 
+                                matching_tool=request.app.state.matching_tool, 
+                                llm=request.app.state.llm_agent, 
+                                vid_url=request.app.state.vid_url, 
+                                url_fps=request.app.state.url_fps)
+        
+        return JSONResponse(jsonable_encoder(results))
+    
+    except Exception as e:
+        # Better error handling, log error and return specific error message
+        print(f"An error occurred: {e}")  # Log the exception for debugging
+        return JSONResponse({"error": str(e)}, status_code=500)
+
 
 @search_route.get('/image/{image_idx}')
 async def get_image(image_idx: str): 
