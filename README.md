@@ -1,11 +1,16 @@
 <p align="center">
   <img src="./docs/AIC2024-Banner website.png" width="1080">
 </p>
+
 <h1 align="center">evento</h1>
+
 
 <p align="center">
   <em>Joining forces with innovators and AI enthusiasts, this project is a dynamic collaboration aimed at crafting a cutting-edge event-retrieval system, proudly participating in the Ho Chi Minh AI Challenge 2024.</em>
 </p>
+
+<!-- ![Static Badge](https://img.shields.io/badge/:hero_of_the_day) -->
+
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -81,8 +86,8 @@ _Note:_ We are happy to share our [trip](https://trello.com/invite/b/66c4acf531c
 │   ├── experimental
 │   │   └── recommender
 │   └── test
-│       ├── api
-│       └── unit
+│       ├── api                               # Testing logic of defined business's API.
+│       └── unit                              # Testing each components.
 ├── docs
 │   ├── notebooks
 │   └── test_query
@@ -143,18 +148,21 @@ In case you can not run `bash`:
 1. Install requirements with `pip install -r requirements.txt`
 2. Run `streamilit run app.py`.
 
+### API
+
+|Method| Type | Description | 
+| - | - | - |
+|`/`| `GET` |  Get a random quote. Just for checking basic connection between frontend and backend. | 
+| `/search` | `POST` | Search by text. |
+| `/search/ocr` | `POST` | Search by fuzzy matching between extracted keywords and OCR-based extraced data.  |
+| `/search/image/{image_idx}` | `GET` | Get image by `image_idx`. |
+| `/search/video/{vid_idx}` | `GET` | Get video metadata by `vid_idx`. |
+
+_Note:_ Detail about how to get response after running the app successfully is in [notebook](./docs/notebooks/dev_search_text_api.ipynb)
+
 
 ## 👣 Workflow
 
-### API
-
-Back-end port: 8000
-
-- `GET` - http://localhost:8000/ : Get a random quote, check basic connection to db, 
-- `POST` - http://localhost:8000/search : Search by text (At the moment). 
-- `GET` - http://localhost:8000/search/{image_idx} : Get image by image_idx.
-
-_Note:_ Detail about how to get response after running the app successfully is in [notebook](notebooks/dev_search_text_api.ipynb)
 
 
 
@@ -165,6 +173,10 @@ _Note:_ Detail about how to get response after running the app successfully is i
 
 ## 🧑‍💻 Contributors
 
-<!-- <a href="https://github.com/MinLee0210">
-    <img src="https://avatars.githubusercontent.com/u/57653278?v=4">
-</a> -->
+## Contributors
+Thanks to the following amazing individuals who have contributed to this project:
+* [Lê Đức Minh](https://github.com/MinLee0210)
+* [Ngọc Huyền](https://github.com/contributor2)
+* [Vũ Hoàng Phát](https://github.com/paultonsdee)
+* [Vân Anh](https://github.com/contributor2)
+* [Phạm Nguyễn Quốc Huy](https://github.com/kidneyflowerSE)
