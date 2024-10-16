@@ -49,11 +49,11 @@ async def lifespan(app):
     # app.state.embedding_model_clip = config.embedding_model_clip
     app.state.embedding_model = {
         'clip': config.embedding_model_clip, 
-        # 'blip': config.embedding_model_blip
+        'blip': config.embedding_model_blip
     }
 
     # Setup LLM agent
-    app.state.llm_agent = config.llm_agent
+    app.state.kw_llm_agent = config.kw_llm_agent
 
     # Setup matching tool
     app.state.matching_tool = config.ocr_matcher
@@ -61,19 +61,15 @@ async def lifespan(app):
     # Setup Vector Store
     logging.info("Setup Vector Store ...")
     db_features = os.path.join(env_dir.db_root, env_dir.features)
-    # project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-    bin_file_clip= os.path.join(env_dir.root, db_features, f'{config.embedding_model_clip.bin_name}.bin')
-    # bin_file_blip= os.path.join(env_dir.root, db_features, f'{config.embedding_model_blip.bin_name}.bin')
-    # vector_store_clip = config.vector_store(env_dir.root, bin_file, id2img_fps, config.device, config.embedding_model_clip)
-
+    bin_file = {
+        'clip': os.path.join(env_dir.root, db_features, f'{config.embedding_model_clip.bin_name}.bin'), 
+        'blip': os.path.join(env_dir.root, db_features, f'{config.embedding_model_blip.bin_name}.bin')
+    }
 
     app.state.vector_store = {
-        'clip': config.vector_store(env_dir.root, bin_file_clip, id2img_fps, config.device, config.embedding_model_clip),
-        # 'blip': config.vector_store(env_dir.root, bin_file, id2img_fps, config.device, config.embedding_model_blip)
+        'clip': config.vector_store(env_dir.root, bin_file['clip'], id2img_fps, config.device, config.embedding_model_clip),
+        'blip': config.vector_store(env_dir.root, bin_file['blip'], id2img_fps, config.device, config.embedding_model_blip)
     }
-    # app.state.vector_store = {
-    #     'clip': config.vector_store(env_dir.root, bin_file, id2img_fps, config.device, config.embedding_model_clip),
-    # }
 
     yield
     
@@ -81,7 +77,7 @@ async def lifespan(app):
 
     del app.state.translator
     del app.state.matching_tool
-    del app.state.llm_agent
+    del app.state.kw_llm_agent
     del app.state.embedding_model
     del app.state.vector_store    
 

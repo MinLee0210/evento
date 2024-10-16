@@ -2,8 +2,10 @@ import json
 
 import streamlit as st
 
-from url import BACKEND_URL_SEARCH_IMAGE, BACKEND_URL_GET_IMAGE, BACKEND_URL_SEARCH_OCR
+from url import (BACKEND_URL_SEARCH_IMAGE, BACKEND_URL_SEARCH_OCR,
+                 BACKEND_URL_GET_IMAGE, BACKEND_URL_GET_VIDEO_METADATA)
 from api.search import search_image_by_text, get_image
+from .display_video import render_video_iframe
 
 def setup_column_2(): 
 
@@ -33,7 +35,7 @@ def setup_column_2():
                 "You can choose CLIP-based or BLIP-based",
                 embed_model_list,
                 index=embed_model_list.index('CLIP')
-            )
+            ).lower()
 
         # Search bar
         text_query = st.text_input("Enter a text query, a frame or an image url", placeholder='Eg: "Cảnh quay một chiếc thuyền cứu hộ đi trên băng..." || "L01_V001, 1" || "https://bitexco.c...scaled.jpg"', key="text_query_for_text_search")
@@ -51,7 +53,6 @@ def setup_column_2():
                     'top_k': K_neighbors,
                     'high_performance': high_performance.lower()
                 }
-
                 try: 
                     response = search_image_by_text(url=BACKEND_URL_SEARCH_IMAGE, data=data)
                                 # Store results in session_state
@@ -112,7 +113,6 @@ def setup_column_2():
         num_cols = 5  # Adjust as needed
         response =  st.session_state.get('search_results')
 
-        infos_query = response['infos_query']
         image_paths = response['image_paths']
         vid_urls = response['vid_urls']
         frames = response['frames']
@@ -135,6 +135,7 @@ def setup_column_2():
                     st.session_state['checkbox_states'][image_id] = False
 
                 with cols[idx]:
+                    # Each iframe component
                     try:
                         # print(infos_query[row_idx])
                         st.image(get_image(url=BACKEND_URL_GET_IMAGE, image_idx=img_path), width=150)  # Set fixed width

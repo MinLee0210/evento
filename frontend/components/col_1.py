@@ -27,7 +27,7 @@ def setup_column_1():
                 #     if image_id in path:
                 #         img_path = path
                 #         break
-                info_query = f"{vid_name}-frame.webp"
+                info_query = f"{vid_name}-{frame}.webp"
                 st.session_state['selected_images'][image_id] = (vid_name, frame, info_query)
             else:
                 st.session_state['selected_images'].pop(image_id, None)

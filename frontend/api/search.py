@@ -18,15 +18,39 @@ def search_image_by_text(url:str, data:dict):
 
         # Check for successful response
         if response.status_code == 200:  # 201 Created
-            print("Post created successfully!")
+            # print("Post created successfully!")
             return response.json()
         else:
-            print(f"Error creating post: {response.status_code}")
+            # print(f"Error creating post: {response.status_code}")
             raise requests.HTTPError(f"Error {response.status_code}: {response.text}")
     except Exception as e: 
         raise requests.HTTPError(e)
 
 def get_image(url, image_idx): 
-    get_image_url = f"{url}/{image_idx}"
-    img = Image.open(requests.get(get_image_url, stream=True).raw).convert('RGB')
-    return img
+    try: 
+        get_image_url = f"{url}/{image_idx}"
+        response = requests.get(get_image_url, stream=True)
+        if response.status_code == 200:  # 201 Created
+            # print("Get created successfully!")
+            img = Image.open(response.raw).convert('RGB')
+            return img
+        else:
+            # print(f"Error creating get: {response.status_code}")
+            raise requests.HTTPError(f"Error {response.status_code}: {response.text}")
+
+    except Exception as e: 
+        raise requests.HTTPError(e)
+
+def get_video_metadata(url, vid_idx): 
+    try: 
+        get_vid_metadata_url = f"{url}/{vid_idx}"
+        response = requests.get(get_vid_metadata_url)
+                # Check for successful response
+        if response.status_code == 200:  # 201 Created
+            # print("Get created successfully!")
+            return response.json()
+        else:
+            # print(f"Error creating get: {response.status_code}")
+            raise requests.HTTPError(f"Error {response.status_code}: {response.text}")
+    except Exception as e: 
+        raise requests.HTTPError(e)

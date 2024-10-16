@@ -9,7 +9,7 @@ from core.config import Environment
 from core.logger import set_logger
 from utils.helpers import is_url
 
-from api.v1.searching import search_by_text, search_by_image_online, search_by_ocr
+from api.v1.searching import search_by_text, search_by_image_online, search_by_ocr, get_video_metadata
 
 search_route = APIRouter(
     prefix="/search"
@@ -41,16 +41,16 @@ async def search_text(request: Request):
         query = payload.get("query")
         top_k = payload.get("top_k", 20)  # Default to 20 if not provided
         high_performance = payload.get('high_performance', 'clip')
-
+        print(high_performance)
         if not query:
             raise HTTPException(status_code=400, detail="Missing query parameter")
         
         # Validate top_k
         if not isinstance(top_k, int) or top_k <= 0:
           raise HTTPException(status_code=400, detail="Invalid top_k value. Must be a positive integer.")
-        
-        if high_performance is not 'clip' or high_performance is not 'blip': 
-          raise HTTPException(status_code=400, detail="Not supported `high_performance`'s input value. Please choose between `clip` and `blip`.")
+        # print(high_performance == 'clip')
+        # if high_performance != 'clip' or high_performance != 'blip': 
+        #   raise HTTPException(status_code=400, detail="Not supported `high_performance`'s input value. Please choose between `clip` and `blip`.")
         
         vector_store = request.app.state.vector_store[high_performance]
         if is_url(query): 
@@ -118,7 +118,7 @@ async def search_with_ocr_matching(request:Request):
         results = search_by_ocr(query=query, 
                                 top_k=top_k, 
                                 matching_tool=request.app.state.matching_tool, 
-                                llm=request.app.state.llm_agent, 
+                                llm=request.app.state.kw_llm_agent, 
                                 vid_url=request.app.state.vid_url, 
                                 url_fps=request.app.state.url_fps)
         
@@ -129,6 +129,24 @@ async def search_with_ocr_matching(request:Request):
         print(f"An error occurred: {e}")  # Log the exception for debugging
         return JSONResponse({"error": str(e)}, status_code=500)
 
+@search_route.get('/video/{vid_idx}')
+async def get_video(vid_idx:str): 
+    try:
+
+        logging.info("Invoke get_video ...")
+
+        vid_name = '.'.join([vid_idx, 'json'])
+        video_metadata = get_video_metadata(vid_idx=vid_name, 
+                                            media_dir=os.path.join(env_dir.root, 
+                                                                   env_dir.db_root, 
+                                                                   env_dir.media_info))
+        logging.info("get_video: sending the image ...")
+        return JSONResponse(content=jsonable_encoder(video_metadata), 
+                            status_code=200)
+        
+    except HTTPException as httpe: 
+        raise HTTPException(status_code=404, 
+                            detail="Get something wrong from the function") from httpe
 
 @search_route.get('/image/{image_idx}')
 async def get_image(image_idx: str): 

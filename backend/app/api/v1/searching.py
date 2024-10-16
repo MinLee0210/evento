@@ -6,18 +6,6 @@ from components.llms.prompts import EXTRACT_KEYWORDS
 def search_by_text(query: str, top_k: int, vector_store, vid_url:dict, url_fps:dict) -> dict:
     """
     Searches for images related to a given text query using a vector store.
-
-    Args:
-        query (str): The text query to search for.
-        top_k (int): The number of top results to return.
-        vector_store: The vector store object to use for searching.
-
-    Returns:
-        dict: A dictionary containing the search results:
-            - scores (list): A list of similarity scores for each retrieved image.
-            - idx_image (list): A list of indices corresponding to the retrieved images.
-            - infos_query (list): A list of filenames (without path) associated with the query.
-            - image_paths (list): A list of filenames (without path) associated with the retrieved images.
     """
     scores, idx_image, infos_query, image_paths = vector_store.text_search(query, top_k)
     vid_urls = []
@@ -114,14 +102,25 @@ def search_by_ocr(query:str, top_k, matching_tool, llm, vid_url:dict, url_fps:di
 
     # Pick up keywords from the original query
     extract_kw_query = EXTRACT_KEYWORDS + "\n" + query
-    try: 
-        
-        keywords = llm.run(extract_kw_query)
-        if isinstance(keywords, str): 
+    retries = 3
+    # try: 
+    print(query)
+    keywords = llm.run(extract_kw_query)
+    # print(keywords)
+    # print(type(keywords))
+    if isinstance(keywords, str): 
+        while retries >= 0: 
+            # Normally, it executes 2 times and break.
             keywords = json.loads(keywords)
-        keywords = [d['keyword'] for d in keywords]
-    except Exception as e: 
-                raise json.JSONDecodeError(e)
+            # print(type(keywords))
+            if type(keywords) == dict or type(keywords) == list: 
+                break
+            retries -= 1
+    keywords = [d['keyword'] for d in keywords]
+    # print(keywords)
+
+    # except Exception as e: 
+    #     raise json.JSONDecodeError(e)
 
     matching_paths = []
     for kw in keywords: 
@@ -143,11 +142,16 @@ def search_by_ocr(query:str, top_k, matching_tool, llm, vid_url:dict, url_fps:di
         vid_urls.append(url)
         # embed_urls.append(embed_url)
         frames.append(frame)
-
     return {
-
         'image_paths': matching_paths,
         'vid_urls': vid_urls, 
         # 'embed_urls': embed_urls, 
         'frames': frames
     }
+
+
+def get_video_metadata(vid_idx, media_dir): 
+    if '.json' not in vid_idx: 
+        vid_idx = '.'.join([vid_idx, 'json']) # File is in .json format
+    vid_metadata = json.loads(open(os.path.join(media_dir, vid_idx), 'r').read())
+    return vid_metadata
