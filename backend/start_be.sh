@@ -4,9 +4,8 @@ pwd
 
 # Run backend
 echo "Moving to backend and install requirements"
-# cd ./backend
-# python3 -m pip install -r requirements.txt
-# cd ../
+python3 -m pip install -r requirements.txt
+cd ../
 
 echo "Moving to app and run the app"
 # cd ./backend/app

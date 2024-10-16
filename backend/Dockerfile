@@ -16,3 +16,6 @@ RUN echo "Setup libraries and dependencies ..."
 RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 RUN pip install -r requirements.txt --no-cache-dir
 RUN echo `Done setting up ${PWD}`
+
+
+# Go to db and download database
