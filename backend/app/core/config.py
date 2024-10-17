@@ -35,21 +35,23 @@ class Environment:
     url_fps = "url_fps.json"
 
 
-DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-EMBEDDING_CONFIG = {'device': DEVICE}
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-KW_LLM_CONFIG = {'api_key': GOOGLE_API_KEY, 
-            'response_setting': {
-                "response_mime_type":'application/json', 
-                "response_schema": list[Keyword]
-            }}
-MATCHING_TOOL_CONFIG = {'csv_path': './db/keyframes.csv', 
-                        'env_dir': Environment()}
 
 @dataclass
 class Config:
     
-    # device = 'cpu'
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+    # TODO: Re-construct this part
+    EMBEDDING_CONFIG = {'device': device}
+    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+    KW_LLM_CONFIG = {'api_key': GOOGLE_API_KEY, 
+                'response_setting': {
+                    "response_mime_type":'application/json', 
+                    "response_schema": list[Keyword]
+                }}
+    MATCHING_TOOL_CONFIG = {'csv_path': './db/keyframes.csv', 
+                            'env_dir': Environment()}
+
     environment = Environment()
     translator = GoogleTranslator()
     embedding_model_clip = EmbeddingFactory.produce(provider='clip', **EMBEDDING_CONFIG)

@@ -24,7 +24,7 @@ def set_logger(level:int=logging.DEBUG, file_dir='./log') -> logging.Logger:
     logger.handlers.clear() # Clear duplicate events
     logger.setLevel(level)
 
-    if os.exists(file_dir): 
+    if os.path.exists(file_dir): 
         to_day = str(time.now())
         file_path = os.path.join(file_dir, f"app_{to_day}.log")
     else: 
