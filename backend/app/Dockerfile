@@ -17,5 +17,3 @@ RUN pip install torch torchvision torchaudio --index-url https://download.pytorc
 RUN pip install -r requirements.txt --no-cache-dir
 RUN echo `Done setting up ${PWD}`
 
-
-# Go to db and download database

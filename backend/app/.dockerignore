@@ -5,7 +5,6 @@
 *.pyd
 
 # Ignore Python virtual environment files
-env
 
 # Ignore pip log files
 pip-log.txt
@@ -26,7 +25,3 @@ coverage.xml
 .pytest_cache
 .hypothesis
 
-# Ignore Git and draft files
-.git
-/draft
-/test
