@@ -6,6 +6,8 @@
 /db/vid_url.json
 /db/url_fps.json
 
+/backend/app/components/llms/groq.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

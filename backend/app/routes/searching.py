@@ -48,9 +48,6 @@ async def search_text(request: Request):
         # Validate top_k
         if not isinstance(top_k, int) or top_k <= 0:
           raise HTTPException(status_code=400, detail="Invalid top_k value. Must be a positive integer.")
-        # print(high_performance == 'clip')
-        # if high_performance != 'clip' or high_performance != 'blip': 
-        #   raise HTTPException(status_code=400, detail="Not supported `high_performance`'s input value. Please choose between `clip` and `blip`.")
         
         vector_store = request.app.state.vector_store[high_performance]
         if is_url(query): 
