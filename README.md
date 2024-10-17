@@ -21,7 +21,8 @@
 - [📍 Overview](#-overview)
 - [🎯 Features](#-feature)
 - [🤖 Tech Stack](#-technologies-used)
-- [🚀 Usage](#-getting-started)
+- [🚀 Usage](#-usage)
+- [📋 API](#-api)
 - [🎬 Demo](#-demo)
 - [👣 Workflow](#-workflow)
 - [📐 App Structure](#-app-structure)
@@ -112,7 +113,7 @@ In case you can not run `bash`:
 1. Install requirements with `pip install -r requirements.txt`
 2. Run `streamilit run app.py`.
 
-### API
+## 📋 API
 
 |Method| Type | Description | 
 | - | - | - |
@@ -127,6 +128,10 @@ _Note:_ Detail about how to get response after running the app successfully is i
 
 ## 🎬 Demo
 
+- **Galleries**
+
+
+- **Videos**
 
 
 ## 👣 Workflow

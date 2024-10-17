@@ -4,11 +4,13 @@ pwd
 
 # Run backend
 echo "Moving to backend and install requirements"
-python3 -m pip install -r requirements.txt
-cd ../
+python3 -m pip install -r requirements.txt --no-cache-dir
+pwd
+# cd ../
 
 echo "Moving to app and run the app"
 # cd ./backend/app
+pwd
 cd ./app
 # Assuming uvicorn requires typing_extensions (modify if not)
 if [ -n "$VIRTUAL_ENV" ]; then
