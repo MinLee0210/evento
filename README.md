@@ -2,31 +2,34 @@
   <img src="./docs/AIC2024-Banner website.png" width="1080">
 </p>
 
-<h1 align="center">evento</h1>
+<h1 align="center"> ⚡️ evento </h1>
 
 
 <p align="center">
   <em>Joining forces with innovators and AI enthusiasts, this project is a dynamic collaboration aimed at crafting a cutting-edge event-retrieval system, proudly participating in the Ho Chi Minh AI Challenge 2024.</em>
 </p>
 
-<!-- ![Static Badge](https://img.shields.io/badge/:hero_of_the_day) -->
 
 
+  ![Static Badge](https://img.shields.io/badge/python->=3.10-blue)
+  ![Static Badge](https://img.shields.io/badge/fastapi-0.115.2-blue)
+  ![Static Badge](https://img.shields.io/badge/streamlit-1.38.0-blue)
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
 
 - [📍 Overview](#-overview)
 - [🎯 Features](#-feature)
-- [🤖Tech Stack](#-technologies-used)
+- [🤖 Tech Stack](#-technologies-used)
 - [🚀 Usage](#-getting-started)
+- [🎬 Demo](#-demo)
 - [👣 Workflow](#-workflow)
-- [👀 Demo](#-demo)
-- [🧑‍💻 Contributors](#-Contributors)
+- [📐 App Structure](#-app-structure)
+- [🧑‍💻 Contributors](#-contributors)
 </details>
 
 ## 📍 Overview
-Welcome to `evento`, an ambitious collaborative project aimed at revolutionizing event retrieval through the innovative use of visual data. Our team, **AIO_TOP10**, is honored to participate in the prestigious Ho Chi Minh AI Challenge 2024, where we strive to showcase our expertise in artificial intelligence. We are committed to developing a cutting-edge, robust, and efficient event-retrieval system, leveraging the immense potential of AI to enhance information retrieval processes.
+Welcome to `⚡️ evento`, an ambitious collaborative project aimed at revolutionizing event retrieval through the innovative use of visual data. Our team, **AIO_TOP10**, is honored to participate in the prestigious Ho Chi Minh AI Challenge 2024, where we strive to showcase our expertise in artificial intelligence. We are committed to developing a cutting-edge, robust, and efficient event-retrieval system, leveraging the immense potential of AI to enhance information retrieval processes.
 
 
 More details about the challenge refers to this [link.](https://aichallenge.hochiminhcity.gov.vn/)
@@ -58,48 +61,6 @@ _Note:_ We are happy to share our [trip](https://trello.com/invite/b/66c4acf531c
 
 
 ## 🚀 Usage
-
-### App Directory
-```
-.
-├── backend
-│   ├── app
-│   │   ├── api
-│   │   │   └── v1
-│   │   │       └── query_refine
-│   │   ├── components
-│   │   │   ├── embedding
-│   │   │   ├── fuzzymatching
-│   │   │   ├── kfe
-│   │   │   ├── llms
-│   │   │   └── translation
-│   │   ├── core
-│   │   ├── routes
-│   │   ├── schema
-│   │   ├── services
-│   │   └── utils
-│   ├── db
-│   │   ├── features
-│   │   ├── media-info
-│   │   ├── objects
-│   │   └── s_optimized_keyframes
-│   ├── experimental
-│   │   └── recommender
-│   └── test
-│       ├── api                               # Testing logic of defined business's API.
-│       └── unit                              # Testing each components.
-├── docs
-│   ├── notebooks
-│   └── test_query
-├── frontend
-│   ├── api
-│   ├── assets
-│   ├── components
-│   └── views
-└── scripts
-```
-
-### Running the app
 
 1. **Clone the repository**
 
@@ -161,22 +122,61 @@ In case you can not run `bash`:
 _Note:_ Detail about how to get response after running the app successfully is in [notebook](./docs/notebooks/dev_search_text_api.ipynb)
 
 
+## 🎬 Demo
+
+
+
 ## 👣 Workflow
 
 
 
 
-## 👀 Demo
-
-
+## 📐 App Structure
+```
+.
+├── backend
+│   ├── app
+│   │   ├── api
+│   │   │   └── v1
+│   │   │       └── query_refine
+│   │   ├── components
+│   │   │   ├── embedding
+│   │   │   ├── fuzzymatching
+│   │   │   ├── kfe
+│   │   │   ├── llms
+│   │   │   └── translation
+│   │   ├── core
+│   │   ├── routes
+│   │   ├── schema
+│   │   ├── services
+│   │   └── utils
+│   ├── db
+│   │   ├── features
+│   │   ├── media-info
+│   │   ├── objects
+│   │   └── s_optimized_keyframes
+│   ├── experimental
+│   │   └── recommender
+│   └── test
+│       ├── api                               # Testing logic of defined business's API.
+│       └── unit                              # Testing each components.
+├── docs
+│   ├── notebooks
+│   └── test_query
+├── frontend
+│   ├── api
+│   ├── assets
+│   ├── components
+│   └── views
+└── scripts
+```
 
 
 ## 🧑‍💻 Contributors
 
-## Contributors
 Thanks to the following amazing individuals who have contributed to this project:
 * [Lê Đức Minh](https://github.com/MinLee0210)
-* [Ngọc Huyền](https://github.com/contributor2)
+* [Phạm Ngọc Huyền](https://www.facebook.com/ngochuyenpham.99)
 * [Vũ Hoàng Phát](https://github.com/paultonsdee)
-* [Vân Anh](https://github.com/contributor2)
+* [Trần Nguyễn Vân Anh](https://www.facebook.com/vananh.trannguyen.54584)
 * [Phạm Nguyễn Quốc Huy](https://github.com/kidneyflowerSE)
