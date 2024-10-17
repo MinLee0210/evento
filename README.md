@@ -63,7 +63,10 @@ _Note:_ We are happy to share our [trip](https://trello.com/invite/b/66c4acf531c
 ## 🚀 Usage
 
 1. **Clone the repository**
-
+```
+git clone https://github.com/MinLee0210/evento.git
+cd /evento
+```
 
 2. **Setup Environment**
 
