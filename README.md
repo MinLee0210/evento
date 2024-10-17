@@ -98,7 +98,7 @@ In case you can not run `bash`:
 1. Install requirements with `pip install -r requirements.txt`
 2. Move to the `/app` and run `uvicorn main:app --host=0.0.0.0 --port=8000 --reload`.
 
-
+ 
 Run the frontend
 
 ```
