@@ -6,7 +6,7 @@ from .clip_ import ClipTool
 class EmbeddingFactory(BaseToolFactory): 
 
     @staticmethod
-    def produce(provider, **kwargs): 
+    def produce(provider:str, **kwargs): 
         try: 
             match provider: 
                 case 'blip': 

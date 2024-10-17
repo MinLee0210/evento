@@ -38,10 +38,10 @@ More details about the challenge refers to this [link.](https://aichallenge.hoch
 
 ## 🎯 Features
 
-[ x ] Multimodal search.
-[ x ] Synthetic data with a Multimodal Model. 
-[ ] Share similarity search.
-[ ] Recommendation.
+- [ x ] Multimodal search.
+- [ x ] Synthetic data with a Multimodal Model. 
+- [ ] Share similarity search.
+- [ ] Recommendation.
  
 _Note:_ We are happy to share our [trip](https://trello.com/invite/b/66c4acf531cdf8fd5c8f167e/ATTI60ab09c08943d3ba5220d47918aab2229CBAC9CF/aiotop10-evento) while developing this app. 
 

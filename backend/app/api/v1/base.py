@@ -1,7 +1,6 @@
 """
 When the frontend triggers its first requests to backend, it should trigger this route to test the connection between frontend and backend.
 """
-import os
 import json
 import requests
 

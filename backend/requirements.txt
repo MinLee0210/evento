@@ -1,14 +1,10 @@
-auto_mix_prep==0.2.0
 faiss_gpu==1.7.2
 fastapi==0.115.2
 fuzzywuzzy==0.18.0
 googletrans==4.0.0rc1
 langdetect==1.0.9
-nest_asyncio==1.6.0
-opencv_python_headless==4.5.5.64
 pandas==2.2.3
 Pillow==11.0.0
-protobuf==5.28.2
 python-dotenv==1.0.1
 pyvi==0.1.1
 PyYAML==6.0.1

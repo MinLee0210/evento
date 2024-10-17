@@ -1,11 +1,9 @@
 #!/bin/sh
 
-pwd
 
 # Run backend
 echo "Moving to backend and install requirements"
-python3 -m pip install -r requirements.txt --no-cache-dir
-pwd
+# python3 -m pip install -r requirements.txt --no-cache-dir
 # cd ../
 
 echo "Moving to app and run the app"

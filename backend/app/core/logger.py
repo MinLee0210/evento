@@ -2,7 +2,7 @@
 
 import os
 import logging
-import time
+from datetime import datetime
 
 class DualHandler(logging.Handler):
     "Builing Configuration for logger"
@@ -24,10 +24,11 @@ def set_logger(level:int=logging.DEBUG, file_dir='./log') -> logging.Logger:
     logger.handlers.clear() # Clear duplicate events
     logger.setLevel(level)
 
-    if os.path.exists(file_dir): 
-        to_day = str(time.now())
-        file_path = os.path.join(file_dir, f"app_{to_day}.log")
-    else: 
+    try: 
+        if os.path.exists(file_dir): 
+            to_day = str(datetime.now().strftime('%Y-%m-%d::%H:%M:%S'))
+            file_path = os.path.join(file_dir, f"app_{to_day}.log")
+    except: 
         file_path = 'app.log'
         
     dual_handler = DualHandler(file_path)
