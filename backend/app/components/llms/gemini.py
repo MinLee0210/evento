@@ -10,7 +10,7 @@ try:
 except ImportError:
     raise ValueError(
         "Gemini is not installed. Please install it with "
-        "`pip install 'google-generativeai>=0.3.0'`."
+        "`pip install 'google-generativeai`."
     )
 
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
