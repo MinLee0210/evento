@@ -1,17 +1,45 @@
 name: evento
 
+volumes:
+  db: 
+
 services:
-  backend:
-    build: ./
-    container_name: hcmc-backend
-    command: sh -c "pwd && ls -la && cd /backend/app && python -m uvicorn main:app --reload --host=0.0.0.0 --workers=4"
-    ports:
-      - 8000:8000
+  db:  
+    build: ./db
+    container_name: db
     volumes:
-      - ./backend:/app  # Mount application code only
-      - ./backend:/db
+      - ./db:/app/db  # Mount the db folder into the /app/db directory
+    
+  evento_be_01:
+    build: ./app
+    container_name: evento_be_01
+    command: sh -c "pwd && ls -la && cd /app && python -m uvicorn main:app --reload --host=0.0.0.0 --workers=4"
+    ports:
+      - 8001:8000
+    volumes:
+      - ./app:/app
     environment:
       - PYTORCH_CUDA_VISIBLE_DEVICES=0  # Assuming you have one GPU
+    depends_on:
+      - db  # Make app depend on db
 
-  nginx: 
-    build
+  # evento_be_02:
+  #   build: ./app
+  #   container_name: evento_be_02
+  #   command: sh -c "pwd && ls -la && cd /app && python -m uvicorn main:app --reload --host=0.0.0.0 --workers=4"
+  #   ports:
+  #     - 8002:8000
+  #   volumes:
+  #     - ./app:/app
+  #   environment:
+  #     - PYTORCH_CUDA_VISIBLE_DEVICES=0  # Assuming you have one GPU
+  #   depends_on:
+  #     - db  # Make app depend on db
+
+  # nginx:
+  #   build: ./nginx
+  #   ports:
+  #     - 80:80
+  #   depends_on:
+  #     - evento_be_01
+  #     - evento_be_02

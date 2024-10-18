@@ -2,10 +2,10 @@
 FROM python:3.10-slim
 
 # Set the working directory
-WORKDIR /backend
+WORKDIR /app
 
 # Copy files from local to container
-COPY . /backend/
+COPY . /app/
 
 # Install pip and setup environments
 RUN echo "Setup environments"
