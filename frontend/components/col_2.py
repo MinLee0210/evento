@@ -77,6 +77,14 @@ def setup_column_2():
                 help="Adjust the number of nearest neighbors to retrieve.",
                 key="ocr_search"
             )
+            mode = st.slider(
+                "Mode of algorithm", 
+                min_value=0, 
+                max_value=8,
+                step=1, 
+                help="Adjust mode the change the fuzzy matching algorithm.", 
+                key="ocr_search_fuzzy_matching"
+            )
 
         # Search bar
         text_query = st.text_input("Enter a text query, a frame or an image url", placeholder='Eg: "Cảnh quay một chiếc thuyền cứu hộ đi trên băng..." || "L01_V001, 1" || "https://bitexco.c...scaled.jpg"', key="text_query_for_ocr_serch")

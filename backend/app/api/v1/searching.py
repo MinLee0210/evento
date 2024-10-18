@@ -95,7 +95,7 @@ def search_by_image_online(img_path: str, top_k: int, vector_store, vid_url:dict
         'frames': frames
     }
 
-def search_by_ocr(query:str, top_k, matching_tool, llm, vid_url:dict, url_fps:dict): 
+def search_by_ocr(query:str, top_k, matching_tool, mode, llm, vid_url:dict, url_fps:dict): 
     """
     Searching by keywords using OCR.
     """
@@ -124,7 +124,7 @@ def search_by_ocr(query:str, top_k, matching_tool, llm, vid_url:dict, url_fps:di
 
     matching_paths = []
     for kw in keywords: 
-        result = matching_tool.run(kw, top_k=top_k)
+        result = matching_tool.run(kw, top_k=top_k, mode=mode)
         img_paths = matching_tool.get_image_paths(result)
         matching_paths += img_paths
 

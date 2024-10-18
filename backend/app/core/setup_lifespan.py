@@ -45,8 +45,6 @@ async def lifespan(app):
     
     # Setup Embedding Model
     logging.info("Setup Embedding Model ...")
-    # app.state.embedding_model = config.embedding_model_blip
-    # app.state.embedding_model_clip = config.embedding_model_clip
     app.state.embedding_model = {
         'clip': config.embedding_model_clip, 
         'blip': config.embedding_model_blip

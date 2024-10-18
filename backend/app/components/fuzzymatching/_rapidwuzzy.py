@@ -19,13 +19,13 @@ class RapidMatchingTool(BaseTool):
         separator (str, optional): Separator used in the CSV file. Defaults to "|".
     """
 
-    def __init__(self, env_dir, csv_path: str=None, mode: int = 0, limit: int = 10, separator: str = "|"):
+    def __init__(self, env_dir, csv_path: str=None, limit: int = 10, separator: str = "|"):
         super().__init__()
         # self.csv_path = csv_path
         self.env_dir = env_dir
         # self.csv_path = csv_path
         self.csv_path = os.path.join(self.env_dir.root, self.env_dir.db_root, self.env_dir.keyframes)
-        self.mode = mode
+        self.fuzz = [rafu_fuzz.ratio, rafu_fuzz.partial_ratio, rafu_fuzz.token_sort_ratio, rafu_fuzz.token_set_ratio, rafu_fuzz.QRatio, rafu_fuzz.WRatio, rafu_fuzz.partial_token_sort_ratio, rafu_fuzz.partial_token_set_ratio]
         self.limit = limit
         self.separator = separator
 
@@ -34,7 +34,7 @@ class RapidMatchingTool(BaseTool):
 
         self._set_id2img_fps()
 
-    def run(self, input, top_k:int=10):
+    def run(self, input, top_k:int=10, mode:int=0):
         """
         Performs Rapid string matching on OCR text.
 
@@ -45,8 +45,8 @@ class RapidMatchingTool(BaseTool):
             list: A list of best matches, each containing the match score and the corresponding OCR text.
         """
 
-        fuzz = [rafu_fuzz.ratio, rafu_fuzz.partial_ratio, rafu_fuzz.token_sort_ratio, rafu_fuzz.token_set_ratio, rafu_fuzz.QRatio, rafu_fuzz.WRatio, rafu_fuzz.partial_token_sort_ratio, rafu_fuzz.partial_token_set_ratio]
-        best_match = rafu_process.extract(input, self.imgs_ocr, scorer=fuzz[self.mode], limit=top_k)
+        
+        best_match = rafu_process.extract(input, self.imgs_ocr, scorer=self.fuzz[mode], limit=top_k)
         return best_match
 
     def load_keyframes(self):

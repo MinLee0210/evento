@@ -9,9 +9,9 @@ class ClipTool(BaseTool):
 
     SUPPORTED_MODELS = {
     "clipB32": ("openai/clip-vit-base-patch32", 'clipB32'),
-    "metaB16": ("facebook/metaclip-b16-fullcc2.5b", 'metaB16'),
-    "metaL14": ('facebook/metaclip-l14-fullcc2.5b', 'metaL14'),
-    "metaH14": ('facebook/metaclip-h14-fullcc2.5b', 'metaH14')
+    # "metaB16": ("facebook/metaclip-b16-fullcc2.5b", 'metaB16'),
+    # "metaL14": ('facebook/metaclip-l14-fullcc2.5b', 'metaL14'),
+    # "metaH14": ('facebook/metaclip-h14-fullcc2.5b', 'metaH14')
     }
 
     def __init__(self, model_id:str="clipB32", device:str="auto") -> None:

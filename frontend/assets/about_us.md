@@ -2,19 +2,8 @@ Our team of five passionate individuals has come together to revolutionize the e
 
 ### We are
 
-- **Vũ Hoàng Phát**
-
-![image](./team_member/vu_hoang_phat.png)
-
-- **Lê Đức Minh**
-![]()
-
-
-- **Phạm Nguyễn Quốc Huy**
-![]()
-
-- **Vân Anh**
-![]()
-
-- **Ngọc Huyền**
-![]()
+* [Vũ Hoàng Phát](https://github.com/paultonsdee)
+* [Lê Đức Minh](https://github.com/MinLee0210)
+* [Phạm Ngọc Huyền](https://www.facebook.com/ngochuyenpham.99)
+* [Trần Nguyễn Vân Anh](https://www.facebook.com/vananh.trannguyen.54584)
+* [Phạm Nguyễn Quốc Huy](https://github.com/kidneyflowerSE)

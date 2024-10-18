@@ -104,6 +104,7 @@ async def search_with_ocr_matching(request:Request):
         logging.info("search_with_ocr_matching: get data from request ...")
         query = payload.get("query")
         top_k = payload.get("top_k", 20)  # Default to 20 if not provided
+        mode = payload.get("mode", 0)
         if not query:
             raise HTTPException(status_code=400, detail="Missing query parameter")
         
@@ -115,6 +116,7 @@ async def search_with_ocr_matching(request:Request):
         results = search_by_ocr(query=query, 
                                 top_k=top_k, 
                                 matching_tool=request.app.state.matching_tool, 
+                                mode=mode,
                                 llm=request.app.state.kw_llm_agent, 
                                 vid_url=request.app.state.vid_url, 
                                 url_fps=request.app.state.url_fps)
