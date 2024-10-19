@@ -45,8 +45,7 @@ async def search_text(request: Request):
         query = payload.get("query")
         top_k = payload.get("top_k", 20)  # Default to 20 if not provided
         high_performance = payload.get("high_performance", "clip")
-        smart_query = payload.get('smart_query')
-        print(high_performance)
+        smart_query = payload.get('smart_query').lower()
 
         if not query:
             raise HTTPException(status_code=400, detail="Missing query parameter")
@@ -97,13 +96,19 @@ async def search_text(request: Request):
             translator = request.app.state.translator
             logging.info("search_text: start querying ...")
             translated_query = translator.run(query)
+
             try: 
-                logging.info('enter smart_query')
-                if smart_query: 
-                    translated_query = refine_query(translated_query)['refine_response']
+                match smart_query: 
+                    case 'plain':
+                        logging.info(f"enter smart_query, mode: {smart_query}")
+                    case 'exploit': 
+                        logging.info(f"enter smart_query, mode: {smart_query}")
+                        translated_query = refine_query(translated_query, style='exploit')['refine_response']
+                    case 'explore': 
+                        logging.info(f"enter smart_query, mode: {smart_query}")
+                        translated_query = refine_query(translated_query, style='explore')['refine_response']
             except:
-                logging.info('running smart_query fail')
-            logging.debug(translated_query)
+                logging.error('running smart_query fail')
 
             results = search_by_text(
                 translated_query,
