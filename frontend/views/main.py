@@ -27,7 +27,7 @@ with st.sidebar:
         st.session_state["top_k"] = K_neighbors
 
         # Checkbox for high_performance
-        embed_model_list = ["CLIP", "BLIP", "BLIP_DES", "BLIP_FCT"]
+        embed_model_list = ["BLIP", "BLIP_DES", "BLIP_FCT", "CLIP"]
         high_performance = st.radio(
             "You can choose CLIP-based or BLIP-based",
             embed_model_list,
@@ -47,7 +47,7 @@ with st.sidebar:
         st.session_state["mode"] = mode
 
     st.write("---")
-    st.write("App created by AIO_TOP10")
+    st.write("App created by **AIO_TOP10**")
 # Title with gradient and centered
 st.markdown(
     """

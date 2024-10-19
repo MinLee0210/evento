@@ -8,7 +8,7 @@ def read_markdown_file(markdown_file):
 
 
 # ----- Sidebar -----
-st.sidebar.write("App created by AIO_TOP10")
+st.sidebar.write("App created by **AIO_TOP10**")
 
 # ----- Main content -----
 st.markdown(
