@@ -1,0 +1,43 @@
+name: linting
+
+on:
+  push:
+    branches:
+      - develop  # You can change this to your development branch name
+
+jobs:
+  format-python-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}  # Checkout the pushed branch
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x  # Choose the Python version you are using
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requirements.dev.txt
+
+      - name: Run Black
+        run: black .
+
+      - name: Run isort
+        run: isort .
+
+      - name: Commit changes
+        run: |
+          git add .
+          git commit -m "Format code with Black and isort" || echo "No changes to commit"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
