@@ -8,7 +8,7 @@ def setup_column_1():
         if st.session_state["expander_content"]:
             vid_name, frame, video_url = st.session_state["expander_content"]
             st.video(video_url)
-            st.write(f"**Video ID:** {vid_name}, {frame}")
+            st.write(f"**Video ID:** {vid_name}, {int(frame)}")
             st.write(f"**Video URL:** {video_url}")
 
             # Checkbox in video details
