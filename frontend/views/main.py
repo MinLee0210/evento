@@ -31,7 +31,7 @@ with st.sidebar:
         high_performance = st.radio(
             "You can choose CLIP-based or BLIP-based",
             embed_model_list,
-            index=embed_model_list.index("CLIP"),
+            index=embed_model_list.index("BLIP"),
         ).lower()
         print(high_performance)
         st.session_state["high_performance"] = high_performance
