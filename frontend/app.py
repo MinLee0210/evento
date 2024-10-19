@@ -1,5 +1,4 @@
 import streamlit as st
-from PIL import Image
 
 from setup_lifespan import setup_template
 
