@@ -2,8 +2,6 @@ name: linting
 
 on:
   push:
-    branches:
-      - develop  # You can change this to your development branch name
 
 jobs:
   format-python-code:
