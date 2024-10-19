@@ -27,7 +27,7 @@ with st.sidebar:
         st.session_state["top_k"] = K_neighbors
 
         # Checkbox for high_performance
-        embed_model_list = ["CLIP", "BLIP"]
+        embed_model_list = ["CLIP", "BLIP", "BLIP_DES", "BLIP_FCT"]
         high_performance = st.radio(
             "You can choose CLIP-based or BLIP-based",
             embed_model_list,

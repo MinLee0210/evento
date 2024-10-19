@@ -7,8 +7,6 @@ from api.base import setup_url
 #                  BACKEND_URL_GET_IMAGE, BACKEND_URL_GET_VIDEO_METADATA)
 from api.search import get_image, search_image_by_text
 
-from .display_video import render_video_iframe
-
 
 def setup_column_2():
     (
@@ -94,7 +92,7 @@ def setup_column_2():
     # Display images from session_state if available
     if st.session_state.get("search_results"):
         # Ensure image_id is unique by adding row and column indices
-        num_cols = 5  # Adjust as needed
+        num_cols = 4  # Adjust as needed
         response = st.session_state.get("search_results")
 
         image_paths = response["image_paths"]
@@ -128,7 +126,6 @@ def setup_column_2():
                         # print(infos_query[row_idx])
                         st.image(
                             get_image(url=BACKEND_URL_GET_IMAGE, image_idx=img_path),
-                            width=150,
                         )  # Set fixed width
                     except Exception as e:
                         st.error(f"Error loading image: {e}")
@@ -136,7 +133,8 @@ def setup_column_2():
                     # Center the button and checkbox using HTML and CSS
                     st.markdown(
                         f"""
-                        <div style="display:flex; flex-direction: column; align-items: center;">
+                        <div style="display:flex; flex-direction: column; align-items: center; border: white;
+                        border-radius:77%">
                         """,
                         unsafe_allow_html=True,
                     )
