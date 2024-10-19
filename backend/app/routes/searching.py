@@ -8,6 +8,7 @@ from api.v1.searching import (
     search_by_text,
     search_by_image
 )
+from api.v1.query_refine import refine_query
 from core.config import Environment
 from core.logger import set_logger
 from fastapi import APIRouter, HTTPException, Request, Response
@@ -44,6 +45,7 @@ async def search_text(request: Request):
         query = payload.get("query")
         top_k = payload.get("top_k", 20)  # Default to 20 if not provided
         high_performance = payload.get("high_performance", "clip")
+        smart_query = payload.get('smart_query')
         print(high_performance)
 
         if not query:
@@ -95,6 +97,12 @@ async def search_text(request: Request):
             translator = request.app.state.translator
             logging.info("search_text: start querying ...")
             translated_query = translator.run(query)
+            try: 
+                logging.info('enter smart_query')
+                if smart_query: 
+                    translated_query = refine_query(translated_query)['refine_response']
+            except:
+                logging.info('running smart_query fail')
             logging.debug(translated_query)
 
             results = search_by_text(
@@ -168,12 +176,13 @@ async def search_with_ocr_matching(request: Request):
             )
 
         logging.info("search_with_ocr_matching: start searching ...")
+
         results = search_by_ocr(
             query=query,
             top_k=top_k,
             matching_tool=request.app.state.matching_tool,
             mode=mode,
-            # llm=request.app.state.kw_llm_agent,
+            llm=None,
             vid_url=request.app.state.vid_url,
             url_fps=request.app.state.url_fps,
         )

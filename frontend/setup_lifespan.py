@@ -38,3 +38,6 @@ def set_session_state():
 
     if "url" not in st.session_state:
         st.session_state["url"] = None
+
+    if "smart_query" not in st.session_state:
+        st.session_state["smart_query"] = None

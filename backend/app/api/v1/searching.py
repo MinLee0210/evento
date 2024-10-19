@@ -4,7 +4,7 @@ import json
 import os
 
 from components.llms.prompts import EXTRACT_KEYWORDS
-
+ 
 
 def search_by_text(
     query: str, top_k: int, vector_store, vid_url: dict, url_fps: dict
@@ -77,9 +77,8 @@ def search_by_image(img_path: str, top_k: int, vector_store, vid_url, url_fps, o
         "frames": frames,
     }
 
-
 def search_by_ocr(
-    query: str, top_k, matching_tool, mode, vid_url: dict, url_fps: dict, llm=None
+    query: str, top_k, matching_tool, mode, llm, vid_url: dict, url_fps: dict
 ):
     """
     Searching by keywords using OCR.

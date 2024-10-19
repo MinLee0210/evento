@@ -46,6 +46,8 @@ def setup_column_2():
             print(high_performance)
             st.session_state["high_performance"] = high_performance
 
+            smart_query = st.toggle("Extend query with LLM")
+            st.session_state['smart_query'] = smart_query
         # Search bar
         text_query = st.text_input(
             "Enter a text query, a frame or an image url",
@@ -61,6 +63,7 @@ def setup_column_2():
                     "query": text_query,
                     "top_k": st.session_state["top_k"],
                     "high_performance": st.session_state["high_performance"],
+                    "smart_query": st.session_state["smart_query"]
                 }
 
                 try:
@@ -102,7 +105,7 @@ def setup_column_2():
             st.session_state["mode"] = mode
         # Search bar
         text_query = st.text_input(
-            "Enter a text query, a frame or an image url",
+            "Enter a keyword",
             placeholder='Eg: "Cảnh quay một chiếc thuyền cứu hộ đi trên băng..." || "L01_V001, 1" || "https://bitexco.c...scaled.jpg"',
             key="text_query_for_ocr_serch",
         )
