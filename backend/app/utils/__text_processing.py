@@ -1,13 +1,15 @@
-import underthesea
-from pyvi import ViUtils, ViTokenizer
 from difflib import SequenceMatcher
+
+import underthesea
 from langdetect import detect
+from pyvi import ViTokenizer, ViUtils
+
 
 class Text_Preprocessing:
-    def __init__(self, stopwords_path='./dict/vietnamese-stopwords-dash.txt'):
-        with open(stopwords_path, 'rb') as f:
+    def __init__(self, stopwords_path="./dict/vietnamese-stopwords-dash.txt"):
+        with open(stopwords_path, "rb") as f:
             lines = f.readlines()
-        self.stop_words = [line.decode('utf8').strip() for line in lines]
+        self.stop_words = [line.decode("utf8").strip() for line in lines]
 
     def remove_stopwords(self, text):
         text = ViTokenizer.tokenize(text)

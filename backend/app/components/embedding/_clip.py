@@ -1,20 +1,16 @@
 import PIL
-from PIL import Image
-
-from transformers import CLIPModel, CLIPImageProcessor, CLIPTokenizer
-
 from components.base import BaseTool
+from PIL import Image
+from transformers import CLIPImageProcessor, CLIPModel, CLIPTokenizer
 
-class ClipTool(BaseTool): 
+
+class ClipTool(BaseTool):
 
     SUPPORTED_MODELS = {
-    "clipB32": ("openai/clip-vit-base-patch32", 'clipB32'),
-    # "metaB16": ("facebook/metaclip-b16-fullcc2.5b", 'metaB16'),
-    # "metaL14": ('facebook/metaclip-l14-fullcc2.5b', 'metaL14'),
-    # "metaH14": ('facebook/metaclip-h14-fullcc2.5b', 'metaH14')
+        "clipB32": ("openai/clip-vit-base-patch32", "clipB32"),
     }
 
-    def __init__(self, model_id:str="clipB32", device:str="auto") -> None:
+    def __init__(self, model_id: str = "clipB32", device: str = "auto") -> None:
         super().__init__()
 
         # TODO: change model_name -> model_id for uniquity in naming.
@@ -25,7 +21,7 @@ class ClipTool(BaseTool):
         self.image_processor = CLIPImageProcessor.from_pretrained(self.model_name)
         self.text_processor = CLIPTokenizer.from_pretrained(self.model_name)
 
-    def run(self, input_data:object, is_numpy: bool = True) -> object:
+    def run(self, input_data: object, is_numpy: bool = True) -> object:
         """
         Runs the ClipTool on the input data.
 
@@ -43,9 +39,9 @@ class ClipTool(BaseTool):
         if isinstance(input_data, str):
             features = self._extract_text_features(input_data)
         elif isinstance(input_data, PIL.Image.Image):
-            features =  self._extract_by_image_features(input_data)
+            features = self._extract_by_image_features(input_data)
 
-        if is_numpy: 
+        if is_numpy:
             features = features.detach().cpu().numpy()
 
         return features
@@ -61,7 +57,7 @@ class ClipTool(BaseTool):
             object: The extracted features.
         """
         text = self.text_processor([text], return_tensors="pt").to(self.device)
-        result =  self.model.get_text_features(**text)
+        result = self.model.get_text_features(**text)
         return result
 
     def _extract_by_image_features(self, image: Image) -> object:

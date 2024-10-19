@@ -1,9 +1,10 @@
 """Settings for FAISS vector indexing"""
 
-import numpy as np
 import faiss
-from PIL import Image
+import numpy as np
 import requests
+from PIL import Image
+
 
 class VectorStore:
     """
@@ -17,7 +18,9 @@ class VectorStore:
         embedding_model: The embedding model used for feature extraction.
     """
 
-    def __init__(self, root: str, bin_file: str, id2img_fps: dict, device: str, embedding_model):
+    def __init__(
+        self, root: str, bin_file: str, id2img_fps: dict, device: str, embedding_model
+    ):
         """
         Initializes the VectorStore instance.
 
@@ -46,7 +49,9 @@ class VectorStore:
         """
         return faiss.read_index(bin_file)
 
-    def _extract_by_image_features(self, image_path: str, online: bool = False) -> np.ndarray:
+    def _extract_by_image_features(
+        self, image_path: str, online: bool = False
+    ) -> np.ndarray:
         """
         Extracts features from an image using the embedding model.
 
@@ -59,10 +64,10 @@ class VectorStore:
         """
         if online:
             request_obj = requests.get(image_path, stream=True, timeout=10).raw
-            img = Image.open(request_obj).convert('RGB')
+            img = Image.open(request_obj).convert("RGB")
         else:
             img = Image.open(image_path)
-        
+
         features = self.embedding_model.run(img)
         return features
 
@@ -79,7 +84,6 @@ class VectorStore:
         features = self.embedding_model.run(text)
         return features
 
-
     def image_search(self, id_query: str, k: int = 10) -> tuple:
         """
         Searches for similar images to the given ID.
@@ -91,7 +95,7 @@ class VectorStore:
         Returns:
             tuple: A tuple containing the scores, indices, image paths, and info queries.
         """
-        query_feats = self.index.reconstruct(id_query).reshape(1,-1)
+        query_feats = self.index.reconstruct(id_query).reshape(1, -1)
         scores, idx_image = self.index.search(query_feats, k=k)
         idx_image = idx_image.flatten()
         infos_query = list(map(self.id2img_fps.get, list(idx_image)))
@@ -116,7 +120,9 @@ class VectorStore:
         image_paths = [info for info in infos_query]
         return scores, idx_image, infos_query, image_paths
 
-    def image_similarity_search(self, image_path: str, k: int, online: bool = False) -> tuple:
+    def image_similarity_search(
+        self, image_path: str, k: int, online: bool = False
+    ) -> tuple:
         """
         Searches for similar images to a given image.
 

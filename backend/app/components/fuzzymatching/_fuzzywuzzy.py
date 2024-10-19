@@ -1,11 +1,11 @@
-import os
 import ast
 import glob
+import os
 
 import pandas as pd
-from fuzzywuzzy import process as fuwu_process, fuzz as fuwu_fuzz
-
 from components.base import BaseTool
+from fuzzywuzzy import fuzz as fuwu_fuzz
+from fuzzywuzzy import process as fuwu_process
 
 
 class FuzzyMatchingTool(BaseTool):
@@ -19,11 +19,20 @@ class FuzzyMatchingTool(BaseTool):
         separator (str, optional): Separator used in the CSV file. Defaults to "|".
     """
 
-    def __init__(self, env_dir, csv_path: str, mode: int = 0, limit: int = 10, separator: str = "|", ):
+    def __init__(
+        self,
+        env_dir,
+        csv_path: str,
+        mode: int = 0,
+        limit: int = 10,
+        separator: str = "|",
+    ):
         super().__init__()
         self.env_dir = env_dir
         # self.csv_path = csv_path
-        self.csv_path = os.path.join(self.env_dir.root, self.env_dir.db_root, self.env_dir.keyframes)
+        self.csv_path = os.path.join(
+            self.env_dir.root, self.env_dir.db_root, self.env_dir.keyframes
+        )
         self.mode = mode
         self.limit = limit
         self.separator = separator
@@ -44,8 +53,17 @@ class FuzzyMatchingTool(BaseTool):
             list: A list of best matches, each containing the match score and the corresponding OCR text.
         """
 
-        fuzz = [fuwu_fuzz.ratio, fuwu_fuzz.partial_ratio, fuwu_fuzz.token_sort_ratio, fuwu_fuzz.token_set_ratio, fuwu_fuzz.QRatio, fuwu_fuzz.WRatio]
-        best_match = fuwu_process.extract(input, self.imgs_ocr, scorer=fuzz[self.mode], limit=self.limit)
+        fuzz = [
+            fuwu_fuzz.ratio,
+            fuwu_fuzz.partial_ratio,
+            fuwu_fuzz.token_sort_ratio,
+            fuwu_fuzz.token_set_ratio,
+            fuwu_fuzz.QRatio,
+            fuwu_fuzz.WRatio,
+        ]
+        best_match = fuwu_process.extract(
+            input, self.imgs_ocr, scorer=fuzz[self.mode], limit=self.limit
+        )
         return best_match
 
     def load_keyframes(self):
@@ -66,9 +84,9 @@ class FuzzyMatchingTool(BaseTool):
             dict: A dictionary mapping keyframe IDs to OCR text.
         """
 
-        imgs_ocr = self.keyframes['ocr'].to_dict()
+        imgs_ocr = self.keyframes["ocr"].to_dict()
         return {
-            key: ' '.join(ast.literal_eval(value)) if pd.notna(value) else ''
+            key: " ".join(ast.literal_eval(value)) if pd.notna(value) else ""
             for key, value in imgs_ocr.items()
         }
 
@@ -76,7 +94,14 @@ class FuzzyMatchingTool(BaseTool):
         """
         Sets a mapping between keyframe IDs and image file paths.
         """
-        lst_keyframes = glob.glob(os.path.join(self.env_dir.root, self.env_dir.db_root, f"{self.env_dir.lst_keyframes['path']}", f"*{self.env_dir.lst_keyframes['format']}"))
+        lst_keyframes = glob.glob(
+            os.path.join(
+                self.env_dir.root,
+                self.env_dir.db_root,
+                f"{self.env_dir.lst_keyframes['path']}",
+                f"*{self.env_dir.lst_keyframes['format']}",
+            )
+        )
         lst_keyframes.sort()
 
         self.id2img_fps = {i: img_path for i, img_path in enumerate(lst_keyframes)}

@@ -1,10 +1,9 @@
 import PIL
+import torch
+from components.base import BaseTool
+from lavis.models import load_model_and_preprocess
 from PIL import Image
 
-import torch
-from lavis.models import load_model_and_preprocess
-
-from components.base import BaseTool
 
 class BlipTool(BaseTool):
     """
@@ -16,13 +15,20 @@ class BlipTool(BaseTool):
         is_eval (bool, optional): Whether to use the model in evaluation mode. Defaults to True.
         device (str, optional): The device to use for the model. Defaults to "auto".
     """
+
     SUPPORTED_MODELS = {
-        'blip2': ("blip2_feature_extractor", "blip2fe")
+        "blip2": ("blip2_feature_extractor", "blip2fe_img"),
+        "blip2_des": ("blip2_feature_extractor", "blip2fe_des"),
+        "blip2_fct": ("blip2_feature_extractor", "blip2fe_fct"),
     }
-    def __init__(self, model_id: str = "blip2", 
-                 model_type: str = "pretrain", 
-                 is_eval: bool = True,
-                 device: str = "auto"):
+
+    def __init__(
+        self,
+        model_id: str = "blip2",
+        model_type: str = "pretrain",
+        is_eval: bool = True,
+        device: str = "auto",
+    ):
         """
         Initializes the BlipTool instance.
 
@@ -34,15 +40,17 @@ class BlipTool(BaseTool):
         """
         super().__init__()
         self.model_name, self.bin_name = self.SUPPORTED_MODELS[model_id]
-        self.model, self.image_processor, self.text_processor = load_model_and_preprocess(
-            name=self.model_name,
-            model_type=model_type,
-            is_eval=is_eval,
-            device=device
+        self.model, self.image_processor, self.text_processor = (
+            load_model_and_preprocess(
+                name=self.model_name,
+                model_type=model_type,
+                is_eval=is_eval,
+                device=device,
+            )
         )
         self.device = device
-        
-    def run(self, input_data:object, is_numpy:bool=True) -> object:
+
+    def run(self, input_data: object, is_numpy: bool = True) -> object:
         """
         Runs the BlipTool on the input data.
 
@@ -61,16 +69,16 @@ class BlipTool(BaseTool):
 
         if isinstance(input_data, str):
             features = self._extract_text_features(input_data)
-            if is_numpy: 
+            if is_numpy:
                 features = features.text_embeds_proj[:, 0, :].detach().cpu().numpy()
         elif isinstance(input_data, PIL.Image.Image):
-            features =  self._extract_by_image_features(input_data)
+            features = self._extract_by_image_features(input_data)
 
-            if is_numpy: 
+            if is_numpy:
                 features = features.image_embeds_proj[:, 0, :].detach().cpu().numpy()
 
         return features
-    
+
     def _extract_text_features(self, text: str) -> object:
         """
         Extracts features from the given text.
@@ -81,8 +89,8 @@ class BlipTool(BaseTool):
         Returns:
             object: The extracted features.
         """
-        with torch.no_grad(): 
-            text = self.text_processor['eval'](text)
+        with torch.no_grad():
+            text = self.text_processor["eval"](text)
             text = {"text_input": [text]}
             features = self.model.extract_features(text, mode="text")
         return features

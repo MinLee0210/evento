@@ -1,4 +1,4 @@
-# ===== QUERY REFINEMENT ===== 
+# ===== QUERY REFINEMENT =====
 QUERY_REWRITE = """Provide a concise and specific search query for an event retrieval engine to find relevant events based on the following prompt. Remember to keep the language and intention of the original prompt.
 
 Prompt: {prompt}

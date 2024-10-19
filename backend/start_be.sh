@@ -1,10 +1,11 @@
 #!/bin/sh
 
-
 # Run backend
 echo "Moving to backend and install requirements"
-# python3 -m pip install -r requirements.txt --no-cache-dir
-# cd ../
+python3 -m pip install -U pip
+python3 -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+python3 -m pip install -r requirements.txt --no-cache-dir
+cd ../
 
 echo "Moving to app and run the app"
 # cd ./backend/app

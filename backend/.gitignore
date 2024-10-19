@@ -5,6 +5,7 @@
 /db/keyframes.csv
 /db/vid_url.json
 /db/url_fps.json
+/db/evento_dataset.zip
 
 /backend/app/components/llms/groq.py
 
