@@ -79,33 +79,33 @@ def search_by_image(img_path: str, top_k: int, vector_store, vid_url, url_fps, o
 
 
 def search_by_ocr(
-    query: str, top_k, matching_tool, mode, llm, vid_url: dict, url_fps: dict
+    query: str, top_k, matching_tool, mode, vid_url: dict, url_fps: dict, llm=None
 ):
     """
     Searching by keywords using OCR.
     """
 
-    # Pick up keywords from the original query
-    extract_kw_query = EXTRACT_KEYWORDS + "\n" + query
-    retries = 3
-    # try:
-    print(query)
-    keywords = llm.run(extract_kw_query)
-    # print(keywords)
-    # print(type(keywords))
-    if isinstance(keywords, str):
-        while retries >= 0:
-            # Normally, it executes 2 times and break.
-            keywords = json.loads(keywords)
-            # print(type(keywords))
-            if type(keywords) == dict or type(keywords) == list:
-                break
-            retries -= 1
-    keywords = [d["keyword"] for d in keywords]
-    # print(keywords)
-
-    # except Exception as e:
-    #     raise json.JSONDecodeError(e)
+    if llm: 
+        # Pick up keywords from the original query
+        extract_kw_query = EXTRACT_KEYWORDS + "\n" + query
+        retries = 3
+        # try:
+        print(query)
+        keywords = llm.run(extract_kw_query)
+        # print(keywords)
+        # print(type(keywords))
+        if isinstance(keywords, str):
+            while retries >= 0:
+                # Normally, it executes 2 times and break.
+                keywords = json.loads(keywords)
+                # print(type(keywords))
+                if type(keywords) == dict or type(keywords) == list:
+                    break
+                retries -= 1
+        keywords = [d["keyword"] for d in keywords]
+    else: 
+        # At this moment, keywords is only a word
+        keywords = [query]
 
     matching_paths = []
     for kw in keywords:

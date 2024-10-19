@@ -173,10 +173,20 @@ async def search_with_ocr_matching(request: Request):
             top_k=top_k,
             matching_tool=request.app.state.matching_tool,
             mode=mode,
-            llm=request.app.state.kw_llm_agent,
+            # llm=request.app.state.kw_llm_agent,
             vid_url=request.app.state.vid_url,
             url_fps=request.app.state.url_fps,
         )
+
+        # results = search_by_ocr(
+        #     query=query,
+        #     top_k=top_k,
+        #     matching_tool=request.app.state.matching_tool,
+        #     mode=mode,
+        #     llm=request.app.state.kw_llm_agent,
+        #     vid_url=request.app.state.vid_url,
+        #     url_fps=request.app.state.url_fps,
+        # )
 
         return JSONResponse(jsonable_encoder(results))
 
