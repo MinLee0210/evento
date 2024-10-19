@@ -45,7 +45,7 @@ async def lifespan(app):
     with open(os.path.join(env_dir.root, env_dir.db_root, env_dir.url_fps), "r") as f:
         app.state.url_fps = json.load(f)
 
-    app.state.keyframes = pd.read_csv(env_dir.root, env_dir.db_root, env_dir.keyframes)
+    app.state.keyframes = pd.read_csv(os.path.join(env_dir.root, env_dir.db_root, env_dir.keyframes), sep="|")
     
     # Setup Translator
     logging.info("Setup Translator ...")

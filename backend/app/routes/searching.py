@@ -1,6 +1,6 @@
 import json
 import os
-
+import re 
 from api.v1.searching import (
     get_video_metadata,
     # search_by_image_online,
@@ -67,8 +67,31 @@ async def search_text(request: Request):
                 url_fps=request.app.state.url_fps,
                 online=True
             )
-        else:
-            logging.info("query is not an URL")
+        elif re.match(r'^L\d{2}_V\d{3},\s*(\d|[1-9]\d{0,4})$', query):
+            logging.info("query is an video id")
+            keyframes = request.app.state.keyframes
+
+            input_vid_name, input_frame = query.split(', ')
+             
+            input_frame = int(input_frame)
+            filtered_df = keyframes[(keyframes['vid_name'] == input_vid_name) & (keyframes['shot'].apply(lambda x: eval(x)[0] <= input_frame <= eval(x)[1]))]
+
+            closest_row = filtered_df.iloc[(filtered_df['frame'] - input_frame).abs().argsort()[:1]]
+            text_query = f"{closest_row['vid_name'].values[0]}, {str(closest_row['frame'].values[0]).zfill(5)}"
+            logging.info("1")
+
+            image_path = os.path.join(request.app.state.env_dir.root, request.app.state.env_dir.db_root, request.app.state.env_dir.lst_keyframes['path'] , '-'.join(text_query.split(', ')) + '.webp')
+            logging.info(image_path)
+            results = search_by_image(
+                img_path=image_path,
+                top_k=top_k,
+                vector_store=vector_store,
+                vid_url=request.app.state.vid_url,
+                url_fps=request.app.state.url_fps,
+                online=False
+            )
+        else: 
+            logging.info("query is a text")
             translator = request.app.state.translator
             logging.info("search_text: start querying ...")
             translated_query = translator.run(query)
@@ -106,79 +129,6 @@ async def search_text(request: Request):
                 status_code=500, detail="Inconsistent array lengths in results."
             )
 
-        return JSONResponse(jsonable_encoder(results))
-
-    except Exception as e:
-        # Better error handling, log error and return specific error message
-        print(f"An error occurred: {e}")  # Log the exception for debugging
-        return JSONResponse({"error": str(e)}, status_code=500)
-
-
-@search_route.post("/image")
-async def search_by_image(request: Request): 
-    retries = 3
-    try:
-        logging.info("Invoke search_by_image ...")
-        payload = await request.json()
-
-        if isinstance(payload, str):
-            logging.info("search_by_image: converting string to json")
-            while retries >= 0:
-                # Normally, it executes 2 times and break.
-                payload = json.loads(payload)
-                print(type(payload))
-                if type(payload) == dict:
-                    break
-                retries -= 1
-
-        logging.info("search_by_image: get data from request ...")
-        query = payload.get("query")
-        top_k = payload.get("top_k", 20)  # Default to 20 if not provided
-        high_performance = payload.get("high_performance", "clip")
-
-        if not query:
-            raise HTTPException(status_code=400, detail="Missing query parameter")
-
-        # Validate top_k
-        if not isinstance(top_k, int) or top_k <= 0:
-            raise HTTPException(
-                status_code=400,
-                detail="Invalid top_k value. Must be a positive integer.",
-            )
-
-        try: 
-
-            logging.info("search_by_image: start searching ...")
-            results = search_by_image(
-                query=query,
-                top_k=top_k,
-                matching_tool=request.app.state.matching_tool,
-                mode=high_performance,
-                llm=request.app.state.kw_llm_agent,
-                vid_url=request.app.state.vid_url,
-                url_fps=request.app.state.url_fps,
-                online=False
-            )
-        except: 
-            logging.info("search_by_image: start searching ...")
-            keyframes = request.app.state.keyframes
-            input_vid_name, input_frame = query.split(', ')
-            input_frame = int(input_frame)
-            filtered_df = keyframes[(keyframes['vid_name'] == input_vid_name) & (keyframes['shot'].apply(lambda x: eval(x)[0] <= input_frame <= eval(x)[1]))]
-            closest_row = filtered_df.iloc[(filtered_df['frame'] - input_frame).abs().argsort()[:1]]
-            text_query = f"{closest_row['vid_name'].values[0]}, {str(closest_row['frame'].values
-            [0]).zfill(5)}"
-            image_path = os.path.join(request.app.state.env_dir.root, '-'.join(text_query.split(', ')) + '.webp')
-            results = search_by_image(
-                query=image_path,
-                top_k=top_k,
-                matching_tool=request.app.state.matching_tool,
-                mode=high_performance,
-                llm=request.app.state.kw_llm_agent,
-                vid_url=request.app.state.vid_url,
-                url_fps=request.app.state.url_fps,
-                online=False
-            )
         return JSONResponse(jsonable_encoder(results))
 
     except Exception as e:

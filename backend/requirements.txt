@@ -4,7 +4,6 @@ fastapi==0.115.2
 googletrans==4.0.0rc1
 opencv_python_headless==4.5.5.64
 Pillow==11.0.0
-protobuf==3.20.0
 python-dotenv==1.0.1
 PyYAML==6.0.2
 rapidfuzz==3.10.0
@@ -14,3 +13,4 @@ translate==3.6.1
 typing_extensions==4.12.2
 uvicorn==0.32.0
 google-generativeai
+numpy==1.26.3

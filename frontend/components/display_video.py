@@ -1,17 +1,17 @@
 import streamlit as st
 
-
 from api.search import get_video_metadata
 
+
 @st.dialog("Video Detail")
-def render_video_iframe(url, vid_idx, vid_url): 
+def render_video_iframe(url, vid_idx, vid_url):
     response = get_video_metadata(url, vid_idx)
 
     # Get variables
-    title = response.get('title')
-    author = response.get('title')
-    description = response.get('description')
-    full_vid_url = response.get('watch_url')
+    title = response.get("title")
+    author = response.get("title")
+    description = response.get("description")
+    full_vid_url = response.get("watch_url")
 
     # Setup layout
     st.video(vid_url)

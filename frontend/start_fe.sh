@@ -1,5 +1,13 @@
 #!/bin/sh
 
+# Update environment
+apt-get update
+apt install python3.10-venv
+
+# Install virtual environment
+python3 -m venv evento_fe
+source evento_fe/bin/activate
+
 echo "Moving to frontend and install requirements"
 python3 -m pip install -r requirements.txt
 
