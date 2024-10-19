@@ -52,7 +52,15 @@ class Config:
     embedding_model_clip = EmbeddingFactory.produce(provider="clip", **EMBEDDING_CONFIG)
     embedding_model_blip = EmbeddingFactory.produce(provider="blip", **EMBEDDING_CONFIG)
 
-    # TODO: Make this fix based on settings on this file, not in `setup_lifespan`
+    EMBEDDING_CONFIG_BLIP_DES = {"device": device, 
+                                 "model_id": "blip2_des"}
+    embedding_model_blip_des = EmbeddingFactory.produce(provider="blip", **EMBEDDING_CONFIG_BLIP_DES)
+
+    EMBEDDING_CONFIG_BLIP_FCT = {"device": device,
+                                 "model_id": "blip2_fct"}
+    embedding_model_blip_fct = EmbeddingFactory.produce(provider="blip", **EMBEDDING_CONFIG_BLIP_FCT)
+
+
     vector_store = VectorStore
 
     kw_llm_agent = AgentFactory.produce(provider="gemini", **KW_LLM_CONFIG)

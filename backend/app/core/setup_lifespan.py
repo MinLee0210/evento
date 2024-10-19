@@ -3,6 +3,8 @@ import json
 import os
 from contextlib import asynccontextmanager
 
+import pandas as pd
+
 from core.config import Config
 from core.logger import set_logger
 from utils.helpers import get_to_root, ignore_warning
@@ -43,6 +45,8 @@ async def lifespan(app):
     with open(os.path.join(env_dir.root, env_dir.db_root, env_dir.url_fps), "r") as f:
         app.state.url_fps = json.load(f)
 
+    app.state.keyframes = pd.read_csv(env_dir.root, env_dir.db_root, env_dir.keyframes)
+    
     # Setup Translator
     logging.info("Setup Translator ...")
     app.state.translator = config.translator
@@ -52,6 +56,8 @@ async def lifespan(app):
     app.state.embedding_model = {
         "clip": config.embedding_model_clip,
         "blip": config.embedding_model_blip,
+        "blip_des": config.embedding_model_blip_des,
+        "blip_fct": config.embedding_model_blip_fct,
     }
 
     # Setup LLM agent
@@ -70,6 +76,12 @@ async def lifespan(app):
         "blip": os.path.join(
             env_dir.root, db_features, f"{config.embedding_model_blip.bin_name}.bin"
         ),
+        "blip_des": os.path.join(
+            env_dir.root, db_features, f"{config.embedding_model_blip.bin_name}.bin"
+        ),
+        "blip_fct": os.path.join(
+            env_dir.root, db_features, f"{config.embedding_model_blip.bin_name}.bin"
+        ),
     }
 
     app.state.vector_store = {
@@ -86,6 +98,20 @@ async def lifespan(app):
             id2img_fps,
             config.device,
             config.embedding_model_blip,
+        ),
+        "blip_des": config.vector_store(
+        env_dir.root,
+        bin_file["blip"],
+        id2img_fps,
+        config.device,
+        config.embedding_model_blip_des,
+        ),
+        "blip_fct": config.vector_store(
+        env_dir.root,
+        bin_file["blip"],
+        id2img_fps,
+        config.device,
+        config.embedding_model_blip_fct,
         ),
     }
 
