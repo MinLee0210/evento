@@ -38,20 +38,19 @@ def setup_column_2():
 
             # Checkbox for high_performance
             embed_model_list = ["BLIP", "BLIP_DES", "BLIP_FCT", "CLIP"]
-            high_performance = st.radio(
+            high_performance = st.select_slider(
                 "You can choose CLIP-based or BLIP-based",
-                embed_model_list,
-                index=embed_model_list.index("BLIP"),
+                options=embed_model_list,
+                value="BLIP",
             ).lower()
-            print(high_performance)
             st.session_state["high_performance"] = high_performance
 
             # smart_query = st.toggle("Extend query with LLM")
-            smart_query = st.radio(
-                "You can choose method to augment query.",
-                ["Plain", "Explore", "Exploit"],
-                index=0,
-            ).lower()
+            smart_query = st.select_slider(
+                            "You can choose method to augment query.",
+                            options=["Plain", "Explore", "Exploit"],
+                            value="Plain"
+                        ).lower()
             print(smart_query)
             st.session_state['smart_query'] = smart_query
         # Search bar
