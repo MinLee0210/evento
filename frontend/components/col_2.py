@@ -195,7 +195,7 @@ def setup_column_2():
                     def button_callback(
                         vid_name=vid_name,
                         frame=frame,
-                        video_url=vid_urls[row_idx],
+                        video_url=vid_urls[idx],
                         button_label=f"{vid_name}, {frame}",
                     ):
                         st.session_state["expander_content"] = (
