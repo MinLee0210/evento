@@ -129,9 +129,9 @@ _Note:_ Detail about how to get response after running the app successfully is i
 ## 🎬 Demo
 
 - **Galleries**
+![image](./docs/evento_ui.png)
 
-
-- **Videos**
+- **Videos**: [here](https://youtu.be/ukiFaszIT1E)
 
 
 ## 👣 Workflow
