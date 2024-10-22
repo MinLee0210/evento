@@ -83,7 +83,9 @@ class RapidMatchingTool(BaseTool):
 
         imgs_ocr = self.keyframes["ocr"].to_dict()
         return {
-            key: " ".join(ast.literal_eval(value)) if pd.notna(value) else ""
+             # key: " ".join(ast.literal_eval(value)) if pd.notna(value) else ""
+            # for key, value in imgs_ocr.items()
+            key: value 
             for key, value in imgs_ocr.items()
         }
 

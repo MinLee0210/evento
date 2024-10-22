@@ -25,6 +25,8 @@ async def lifespan(app):
 
     logging.info("Setup Paths ...")
     env_dir = config.environment
+    app.state.env_dir = env_dir
+    
     lst_keyframes = glob.glob(
         os.path.join(
             env_dir.root,
@@ -94,14 +96,14 @@ async def lifespan(app):
         ),
         "blip": config.vector_store(
             env_dir.root,
-            bin_file["blip"],
+            bin_file["blip_des"],
             id2img_fps,
             config.device,
             config.embedding_model_blip,
         ),
         "blip_des": config.vector_store(
         env_dir.root,
-        bin_file["blip"],
+        bin_file["blip_des"],
         id2img_fps,
         config.device,
         config.embedding_model_blip_des,

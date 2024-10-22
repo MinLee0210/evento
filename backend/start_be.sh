@@ -2,15 +2,25 @@
 
 # Update environment
 apt-get update
-apt install python3.10-venv
+
+apt-get install unzip
 
 # Install virtual environment
+apt install python3.10-venv
 python3 -m venv evento_be
 source evento_be/bin/activate
 
+# Move to db 
+cd db/
+python3 -m pip install -U pip
+python3 -m pip install gdown
+bash download_file_from_gdrive.sh
+echo "Finish setting up db" 
+cd ../
+
+
 # Run backend
 echo "Moving to backend and install requirements"
-python3 -m pip install -U pip
 python3 -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 python3 -m pip install -r requirements.txt
 

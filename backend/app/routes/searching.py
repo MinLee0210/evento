@@ -45,7 +45,7 @@ async def search_text(request: Request):
         query = payload.get("query")
         top_k = payload.get("top_k", 20)  # Default to 20 if not provided
         high_performance = payload.get("high_performance", "clip")
-        smart_query = payload.get('smart_query').lower()
+        smart_query = payload.get('smart_query', 'plain').lower()
 
         if not query:
             raise HTTPException(status_code=400, detail="Missing query parameter")
