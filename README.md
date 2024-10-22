@@ -41,7 +41,6 @@ More details about the challenge refers to this [link.](https://aichallenge.hoch
 - [x] Multimodal search.
 - [x] Synthetic data with a Multimodal Model. 
 - [ ] Share similarity search.
-- [ ] Recommendation.
  
 _Note:_ We are happy to share our [trip](https://trello.com/invite/b/66c4acf531cdf8fd5c8f167e/ATTI60ab09c08943d3ba5220d47918aab2229CBAC9CF/aiotop10-evento) while developing this app. 
 
@@ -52,7 +51,6 @@ _Note:_ We are happy to share our [trip](https://trello.com/invite/b/66c4acf531c
 
 - Back-end: FastAPI. 
 - Front-end: Streamlit.
-- Deploy: Docker, Vercel.
 
 ### Core technology
 
@@ -136,7 +134,7 @@ _Note:_ Detail about how to get response after running the app successfully is i
 
 ## 👣 Workflow
 
-
+![system architecture](./docs/system_architecture.png)
 
 
 ## 📐 App Structure
