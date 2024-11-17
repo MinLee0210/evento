@@ -54,9 +54,9 @@ _Note:_ We are happy to share our [trip](https://trello.com/invite/b/66c4acf531c
 
 ### Core technology
 
-- Keyframe-extraction: TransNetV2 + K-Means clustering.
+- Keyframe-extraction: TransNetV2 + Adaptive clustering.
 - LLM: Gemini. 
-- Embedding: CLIP, BLIP.
+- Embedding: CLIP, BLIP2.
 
 
 ## 🚀 Usage
@@ -177,12 +177,27 @@ _Note:_ Detail about how to get response after running the app successfully is i
 ```
 
 
-## 🧑‍💻 Contributors
+## 🧑‍💻 Collaborators
 
-Thanks to the following amazing individuals who have contributed to this project:
-* [Lê Đức Minh](https://github.com/MinLee0210)
-* [Phạm Thị Ngọc Huyền](https://www.facebook.com/ngochuyenpham.99)
-* [Vũ Hoàng Phát](https://github.com/paultonsdee)
-* [Trần Nguyễn Vân Anh](https://www.facebook.com/vananh.trannguyen.54584)
-* [Phạm Nguyễn Quốc Huy](https://github.com/kidneyflowerSE)
-* [Nguyễn Hải Đăng]()
+A big thank you to the following amazing individuals for their valuable contributions to this project:
+
+* [Vũ Hoàng Phát](https://github.com/paultonsdee) - Lead Project Manager & AI Solutions Developer
+  * Primarily responsible for researching and implementing AI solutions
+  * Analyzed and processed data
+
+* [Lê Đức Minh](https://github.com/MinLee0210) - Backend Developer & AI Researcher
+  * Deployed the backend
+  * Conducted research to propose ideas for new features and improvements
+
+* [Trần Nguyễn Vân Anh](https://www.facebook.com/vananh.trannguyen.54584) - AI Researcher & Technical Writer
+  * Contributed to AI research and technical documentation
+
+* [Phạm Thị Ngọc Huyền](https://www.facebook.com/ngochuyenpham.99) - AI Researcher, Technical Writer & UI/UX Designer
+  * Focused on AI research, writing technical content, and designing user-friendly interfaces
+
+* [Phạm Nguyễn Quốc Huy](https://github.com/kidneyflowerSE) - Frontend Developer
+  * Developed and optimized the frontend
+
+* [Nguyễn Hải Đăng]() - Technical Writer Mentor
+  * Mentored and guided the team in creating high-quality technical documentation
+
