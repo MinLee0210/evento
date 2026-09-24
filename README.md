@@ -140,41 +140,26 @@ _Note:_ Detail about how to get response after running the app successfully is i
 ```
 .
 ├── backend
-│   ├── app
-│   │   ├── api
-│   │   │   └── v1
-│   │   │       └── query_refine
-│   │   ├── components
-│   │   │   ├── embedding
-│   │   │   ├── fuzzymatching
-│   │   │   ├── kfe
-│   │   │   ├── llms
-│   │   │   └── translation
-│   │   ├── core
-│   │   ├── routes
-│   │   ├── schema
-│   │   ├── services
-│   │   └── utils
-│   ├── db
-│   │   ├── features
-│   │   ├── media-info
-│   │   ├── objects
-│   │   └── s_optimized_keyframes
-│   ├── experimental
-│   │   └── recommender
-│   └── test
-│       ├── api                               # Testing logic of defined business's API.
-│       └── unit                              # Testing each components.
+│   ├── app
+│   │   ├── main.py            # create_app(): FastAPI app + lifespan
+│   │   ├── core               # Settings, logger
+│   │   ├── components         # Embedder (CLIP/BLIP), Translator, QueryRefiner, OcrMatcher
+│   │   ├── services           # SearchService, KeyframeCatalog, VectorStore
+│   │   ├── schema             # Request/response models
+│   │   └── routes             # HTTP endpoints
+│   ├── db                     # Dataset (features, media-info, s_optimized_keyframes, ...)
+│   ├── experimental           # Offline tooling (keyframe extraction, recommender, captioning)
+│   └── tests                  # pytest suite, runs without models or dataset
 ├── docs
-│   ├── notebooks
-│   └── test_query
 ├── frontend
-│   ├── api
-│   ├── assets
-│   ├── components
-│   └── views
+│   ├── app.py                 # Streamlit entrypoint
+│   ├── client.py              # BackendClient
+│   ├── search_page.py         # SearchPage + SearchState
+│   └── views
 └── scripts
 ```
+
+Run the backend tests with `cd backend && pytest tests`.
 
 
 ## 🧑‍💻 Collaborators
