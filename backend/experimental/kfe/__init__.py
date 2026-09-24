@@ -3,8 +3,8 @@
 
 import numpy as np
 import torch
-from src.tools.kfe.k_means import kmeans_silhouette
-from src.tools.kfe.redundancy import redundancy_
+from .k_means import kmeans_silhouette
+from .redundancy import redundancy_
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
